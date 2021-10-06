@@ -43,9 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const AuthorPage: React.FC = () =>  {
     const classes = useStyles();
-    /*const {_id} = useSelector((state: AppStoreType) => state.auth);
-    const pack = useSelector((state: AppStoreType) => state.pack);*/
-    /*const dispatch = useDispatch();*/
 
     return (
         <div className={classes.root}>

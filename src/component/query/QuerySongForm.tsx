@@ -1,11 +1,13 @@
-import React, {Dispatch, KeyboardEventHandler, SetStateAction, useState} from 'react';
+import React, {ChangeEventHandler, Dispatch, KeyboardEventHandler, SetStateAction, useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 /*import DatePicker from '@mui/lab/DatePicker';*/
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
 import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
+import moment from "moment";
 import {Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select} from "@material-ui/core";
+import {SongQueryObjectType} from "../../api/api";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -13,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         rootGrid: {
             flexGrow: 1,
         },
-        formButtonBlock : {
+        formButtonBlock: {
             display: "flex",
             alignItems: "center",
         },
@@ -37,37 +39,21 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface QuerySongFormPropsType {
-    /*setSongName : Dispatch<SetStateAction<string>>
-    setSongDate : Dispatch<SetStateAction<string>>
-    setAuthorName : Dispatch<SetStateAction<string>>
-    setOffset : Dispatch<SetStateAction<number | undefined>>
-    setLimit : Dispatch<SetStateAction<number | undefined>>*/
-    handleSubmitCallBack : () => void
+    handleSubmitCallBack: (songQueryObject: SongQueryObjectType) => void
 }
 
 export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
-    const { handleSubmitCallBack}  = props
+    const {handleSubmitCallBack} = props
 
     const classes = useStyles();
 
     const [songTitle, setSongTitle] = useState<string>('');
-    const [createdAt, setCreatedAt] = React.useState<Date | null>(null);
+    const [createdAt, setCreatedAt] = React.useState<string>('');
+    /*const [createdAt, setCreatedAt] = React.useState<string>(moment(new Date()).format('YYYY-MM-DD'));*/
     const [authorName, setAuthorName] = useState<string>('');
-    const [offset, setOffset] = useState<number>();
-    const [limit, setLimit] = useState<number>();
-
-    /*const inputHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value);
-    };*/
-
-    /*const handleAddPAck = () => {
-        if (packName) {
-            let newObject = {
-                name : packName
-            }
-            dispatch(addNewPackTC(newObject))
-        }
-    }*/
+    const [offset, setOffset] = useState<string>('');
+    const [limit, setLimit] = useState<string>('');
+    const [authorList, setAuthorList] = useState<Array<string>>(["6a2244a8-6285-456d-a9ed-cd501d94f847"]);
 
     const handleSongTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSongTitle(event.target.value)
@@ -75,16 +61,47 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
     const handleAuthorNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorName(event.target.value)
     }
+    const handleCreatedAt = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCreatedAt(event.target.value);
+    };
+
     const handleOffset = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOffset(parseInt(event.target.value))
+        let value = event.target.value
+        /*if (!isFinite(+value)) return;*/
+        setOffset(value);
     }
     const handleLimit = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLimit(parseInt(event.target.value))
+        let value = event.target.value
+        /*if (!isFinite(+value)) return;*/
+        setLimit(value)
     }
-    /*const handleDate = (event : any ) => {
-        setCreatedAt(event.target.vale)
-    }*/
-    const handleSubmit = () => {}
+
+    const handleSubmit = () => {
+        const querySongObject = {
+            params: {
+                ...(songTitle !== '' && {
+                    songTitle
+                }),
+                ...(authorName !== '' && {
+                    authorName
+                }),
+                ...((limit !== '' && isFinite(+limit)) && {
+                    limit: Number(limit)
+                }),
+                ...((offset !== '' && isFinite(+offset)) && {
+                    offset: Number(offset)
+                }),
+                ...(createdAt !== '' && {
+                    createdAtSong: createdAt
+                }),
+                /*...(authorList !== undefined && {
+                    authorList: authorList
+                }),*/
+            }
+        }
+        handleSubmitCallBack(querySongObject)
+        console.log(querySongObject);
+    }
 
     return (
         <div>
@@ -125,6 +142,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         onChange={handleAuthorNameChange}
                     />
                     <TextField
+                        /*type={"number"}*/
                         value={offset}
                         size={"small"}
                         className={classes.search}
@@ -135,6 +153,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         onChange={handleOffset}
                     />
                     <TextField
+                        /*type={"number"}*/
                         value={limit}
                         size={"small"}
                         className={classes.search}
@@ -144,19 +163,28 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         variant="outlined"
                         onChange={handleLimit}
                     />
-                    {/*<DatePicker
-                        label="Basic example"
+                    <TextField
                         value={createdAt}
-                        onChange={handleDate}
-                        renderInput={(params : any ) => <TextField {...params} />}
-                    />*/}
+                        size={"small"}
+                        className={classes.search}
+                        style={{backgroundColor: "#ECECF9"}}
+                        label="createdAt"
+                        type="date"
+                        /*defaultValue="2017-05-24"*/
+                        /*defaultValue={moment(new Date()).format('YYYY-MM-DD')}*/
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={handleCreatedAt}
+                    />
                     <Button
                         type={'submit'}
                         variant={'contained'}
                         className={classes.formButtonBlock}
-                        color={'primary'}>
+                        color={'primary'}
+                        onClick={handleSubmit}
+                    >
                         Search
-                        onChange={handleSubmit}
                     </Button>
                 </Grid>
             </Grid>

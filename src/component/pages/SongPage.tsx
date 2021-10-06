@@ -10,6 +10,7 @@ import {Card, Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {QuerySongForm} from "../query/QuerySongForm";
 import SongTable from '../common/table/SongTable';
+import {authorsAPI, SongQueryObjectType, songsAPI} from "../../api/api";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -108,12 +109,41 @@ const songArray: Array<SongType> = [
 export const SongPage: React.FC = () => {
 
     const classes = useStyles();
+    const [songArray, setSongArray] = useState<Array<SongType>>([]);
+
+    async function getAllSongs(queryObject: SongQueryObjectType | undefined) {
+        try {
+            let response = await songsAPI.getAllSong(queryObject);
+            /*console.log(response.data);*/
+            setSongArray(response.data);
+        } catch (err) {
+            console.log('Something went wrong', err);
+        }
+    }
 
 
     useEffect(() => {
-        // get all songs
+        console.log("Use effect",)
+        getAllSongs(undefined);
     }, [])
-    const handleSubmit = () => {
+
+    const handleSubmit = (queryObject: SongQueryObjectType) => {
+        console.log("From call back", queryObject);
+        getAllSongs(queryObject);
+    }
+
+    const handleDeleteSong = (uuid: string) => {
+        songsAPI.deleteSong(uuid)
+            .then(res => {
+                console.log("Song has been deleted");
+                getAllSongs(undefined);
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
+    }
+    const handleAddSong = () => {
+
     }
 
     return (
@@ -134,46 +164,44 @@ export const SongPage: React.FC = () => {
                         className={classes.filterBlock}
                     >
                         <QuerySongForm
-                            /*setSongName={setSongName}
-                            setSongDate={setSongDate}
-                            setAuthorName ={setAuthorName}
-                            setOffset = {setOffset}
-                            setLimit = {setLimit}*/
                             handleSubmitCallBack={handleSubmit}
-                    />
-                    {/*<RangeShowCard/>*/}
-                </Grid>
-                <Grid
-                    item
-                    className={classes.mainBlock}
-                >
-                    <Grid
-                        item
-                        className={classes.mainSearchBlock}
-                        alignItems={"stretch"}
-                    >
-                        <Typography
-                            variant={"h2"}
-                            className={classes.mainSearchHeader}
-                        >
-                            Songs page
-                        </Typography>
-                        {/*<QuerySongForm/>*/}
-                    </Grid>
-                    <Grid
-                        item
-                        /*className={classes.mainTableBlock}*/
-                        alignItems={"stretch"}
-                    >
-                        <SongTable
-                            songArray={songArray}
                         />
                     </Grid>
+                    <Grid
+                        item
+                        className={classes.mainBlock}
+                    >
+                        <Grid
+                            item
+                            className={classes.mainSearchBlock}
+                            alignItems={"stretch"}
+                        >
+                            <Typography
+                                variant={"h2"}
+                                className={classes.mainSearchHeader}
+                            >
+                                <div>
+
+
+                                </div>
+                            </Typography>
+                            {/*<QuerySongForm/>*/}
+                        </Grid>
+                        <Grid
+                            item
+                            /*className={classes.mainTableBlock}*/
+                            alignItems={"stretch"}
+                        >
+                            <SongTable
+                                songArray={songArray}
+                                handleDeleteCallback={handleDeleteSong}
+                            />
+                        </Grid>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Paper>
-</div>
-)
+            </Paper>
+        </div>
+    )
 }
 
 export default SongPage
