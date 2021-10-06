@@ -10,7 +10,8 @@ import {Card, Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {QuerySongForm} from "../query/QuerySongForm";
 import SongTable from '../common/table/SongTable';
-import {authorsAPI, SongQueryObjectType, songsAPI} from "../../api/api";
+import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI} from "../../api/api";
+import {AddSongPage} from "../query/AddSongForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -142,8 +143,15 @@ export const SongPage: React.FC = () => {
                 console.log('Something went wrong', err);
             })
     }
-    const handleAddSong = () => {
-
+    const handleAddSong = ( songObject : AddSongObjectType) => {
+        songsAPI.addSong(songObject)
+            .then(res => {
+                console.log("Song has been deleted");
+                getAllSongs(undefined);
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
     }
 
     return (
@@ -180,8 +188,11 @@ export const SongPage: React.FC = () => {
                                 variant={"h2"}
                                 className={classes.mainSearchHeader}
                             >
+                                List of song
                                 <div>
-
+                                <AddSongPage
+                                    handleAddSongCallBack={handleAddSong}
+                                />
 
                                 </div>
                             </Typography>
