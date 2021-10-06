@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 /*import RangeShowCard from './RangeShowCard';*/
@@ -9,6 +9,7 @@ import {Card, Paper} from "@material-ui/core";
 /*import Search from './Search';*/
 import Typography from "@material-ui/core/Typography";
 import {QuerySongForm} from "../query/QuerySongForm";
+import SongTable from '../common/table/SongTable';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,11 +44,77 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export const SongPage: React.FC = () =>  {
+export interface SongType {
+    uuid: string
+    title: string
+    duration: number
+    createdAt: string
+    updatedAt: string
+    author: AuthorType
+}
+
+export interface AuthorType {
+    uuid: string
+    name: string
+    label: string
+}
+
+const songArray: Array<SongType> = [
+    {
+        uuid: "12760b38-b681-45dc-9c5c-0eca12994d16",
+        title: "15",
+        duration: 450,
+        createdAt: "2021-10-06T14:23:08.313Z",
+        updatedAt: "2021-10-06T14:23:08.313Z",
+        author: {
+            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
+            name: "Radiohead 3",
+            label: "some label 2"
+        }
+    },
+    {
+        uuid: "66f3230b-9393-4cac-99fd-858a40d9fefe",
+        title: "60",
+        duration: 450,
+        createdAt: "2021-10-06T14:23:13.154Z",
+        updatedAt: "2021-10-06T14:23:13.154Z",
+        author: {
+            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
+            name: "Radiohead 3",
+            label: "some label 2"
+        }
+    },
+    {
+        uuid: "076881ab-8fec-4ddb-a58c-05110228c2a8",
+        title: "nude",
+        duration: 450,
+        createdAt: "2021-10-06T14:23:17.091Z",
+        updatedAt: "2021-10-06T14:23:17.091Z",
+        author: {
+            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
+            name: "Radiohead 3",
+            label: "some label 2"
+        }
+    }
+]
+
+/* Получить все песни определенного исполнителя или нескольких исполнителей.*/
+/* Получить выборку песен или исполнителей по части их названия.*/
+/* Получить выборку песен или исполнителей по дате внесения записи.*/
+/* Получить часть выборки песен или исполнителей. Например,
+    10 песен, идущих после первых 20-и от начала выборки.
+*/
+
+export const SongPage: React.FC = () => {
+
     const classes = useStyles();
-    /*const {_id} = useSelector((state: AppStoreType) => state.auth);
-    const pack = useSelector((state: AppStoreType) => state.pack);*/
-    /*const dispatch = useDispatch();*/
+
+
+    useEffect(() => {
+        // get all songs
+    }, [])
+    const handleSubmit = () => {
+    }
 
     return (
         <div className={classes.root}>
@@ -66,37 +133,47 @@ export const SongPage: React.FC = () =>  {
                         item
                         className={classes.filterBlock}
                     >
-                        <QuerySongForm/>
-                        {/*<RangeShowCard/>*/}
+                        <QuerySongForm
+                            /*setSongName={setSongName}
+                            setSongDate={setSongDate}
+                            setAuthorName ={setAuthorName}
+                            setOffset = {setOffset}
+                            setLimit = {setLimit}*/
+                            handleSubmitCallBack={handleSubmit}
+                    />
+                    {/*<RangeShowCard/>*/}
+                </Grid>
+                <Grid
+                    item
+                    className={classes.mainBlock}
+                >
+                    <Grid
+                        item
+                        className={classes.mainSearchBlock}
+                        alignItems={"stretch"}
+                    >
+                        <Typography
+                            variant={"h2"}
+                            className={classes.mainSearchHeader}
+                        >
+                            Songs page
+                        </Typography>
+                        {/*<QuerySongForm/>*/}
                     </Grid>
                     <Grid
                         item
-                        className={classes.mainBlock}
+                        /*className={classes.mainTableBlock}*/
+                        alignItems={"stretch"}
                     >
-                        <Grid
-                            item
-                            className={classes.mainSearchBlock}
-                            alignItems={"stretch"}
-                        >
-                            <Typography
-                                variant={"h2"}
-                                className={classes.mainSearchHeader}
-                            >
-                                Songs page
-                            </Typography>
-                            {/*<QuerySongForm/>*/}
-                        </Grid>
-                        <Grid
-                            item
-                            /*className={classes.mainTableBlock}*/
-                            alignItems={"stretch"}
-                        >
-
-
-                        </Grid>
+                        <SongTable
+                            songArray={songArray}
+                        />
                     </Grid>
                 </Grid>
-            </Paper>
-        </div>
-    )
+            </Grid>
+        </Paper>
+</div>
+)
 }
+
+export default SongPage

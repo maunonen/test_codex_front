@@ -1,5 +1,6 @@
-import React, {KeyboardEventHandler, useState} from 'react';
+import React, {Dispatch, KeyboardEventHandler, SetStateAction, useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+/*import DatePicker from '@mui/lab/DatePicker';*/
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
 import {useDispatch} from "react-redux";
@@ -35,33 +36,25 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const QuerySongForm: React.FC = () => {
+export interface QuerySongFormPropsType {
+    /*setSongName : Dispatch<SetStateAction<string>>
+    setSongDate : Dispatch<SetStateAction<string>>
+    setAuthorName : Dispatch<SetStateAction<string>>
+    setOffset : Dispatch<SetStateAction<number | undefined>>
+    setLimit : Dispatch<SetStateAction<number | undefined>>*/
+    handleSubmitCallBack : () => void
+}
 
-    /* Получить все песни определенного исполнителя или нескольких исполнителей.*/
-    /* Получить выборку песен или исполнителей по части их названия.*/
-    /* Получить выборку песен или исполнителей по дате внесения записи.*/
-    /* Получить часть выборки песен или исполнителей. Например,
-        10 песен, идущих после первых 20-и от начала выборки.
-    */
+export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
+    const { handleSubmitCallBack}  = props
+
     const classes = useStyles();
-    /*const dispatch = useDispatch()*/
-    /*const [search, setSearch] = React.useState('');*/
 
-    const [songName, setSongName] = useState<string>('');
-    const [songDate, setSongDate] = useState<string>('');
+    const [songTitle, setSongTitle] = useState<string>('');
+    const [createdAt, setCreatedAt] = React.useState<Date | null>(null);
     const [authorName, setAuthorName] = useState<string>('');
-    const [offset, setOffset] = useState<string>('');
-    const [limit, setLimit] = useState<string>('');
-
-    /*const [name, setName] = useState<string>('first deck updated')
-    const [path, setPath] = useState<string>('')
-    const [grade, setGrade] = useState<number>(0)
-    const [shots, setShots] = useState<number>(0)
-    const [rating, setRating] = useState<number>(0)
-    const [deckCover, setDeckCover] = useState<string>('')
-    const [privateDeck, setPrivateDeck] = useState<boolean>(false)
-    const [modalAddStatus, setModalAddStatus] = useState<boolean>(false);
-    const [packName, setPackName] = useState<string>('')*/
+    const [offset, setOffset] = useState<number>();
+    const [limit, setLimit] = useState<number>();
 
     /*const inputHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
@@ -76,9 +69,22 @@ export const QuerySongForm: React.FC = () => {
         }
     }*/
 
-    /*const handlePackNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPackName(event.target.value)
+    const handleSongTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSongTitle(event.target.value)
+    }
+    const handleAuthorNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAuthorName(event.target.value)
+    }
+    const handleOffset = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOffset(parseInt(event.target.value))
+    }
+    const handleLimit = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLimit(parseInt(event.target.value))
+    }
+    /*const handleDate = (event : any ) => {
+        setCreatedAt(event.target.vale)
     }*/
+    const handleSubmit = () => {}
 
     return (
         <div>
@@ -99,43 +105,58 @@ export const QuerySongForm: React.FC = () => {
                         Filter songs
                     </Typography>
                     <TextField
+                        value={songTitle}
                         size={"small"}
                         className={classes.search}
                         style={{backgroundColor: "#ECECF9"}}
-                        label="Song name"
+                        label="Song title"
+                        placeholder="Song title"
+                        variant="outlined"
+                        onChange={handleSongTitleChange}
+                    />
+                    <TextField
+                        value={authorName}
+                        size={"small"}
+                        className={classes.search}
+                        style={{backgroundColor: "#ECECF9"}}
+                        label="Author name"
                         placeholder="Song name"
                         variant="outlined"
+                        onChange={handleAuthorNameChange}
                     />
                     <TextField
+                        value={offset}
                         size={"small"}
                         className={classes.search}
                         style={{backgroundColor: "#ECECF9"}}
-                        label="Author"
-                        placeholder="Song name"
+                        label="Offset"
+                        placeholder="offset"
                         variant="outlined"
+                        onChange={handleOffset}
                     />
                     <TextField
+                        value={limit}
                         size={"small"}
                         className={classes.search}
                         style={{backgroundColor: "#ECECF9"}}
-                        label="Start from"
-                        placeholder="start from"
+                        label="set limit"
+                        placeholder="set limit"
                         variant="outlined"
+                        onChange={handleLimit}
                     />
-                    <TextField
-                        size={"small"}
-                        className={classes.search}
-                        style={{backgroundColor: "#ECECF9"}}
-                        label="Chunk size"
-                        placeholder="chunk size"
-                        variant="outlined"
-                    />
+                    {/*<DatePicker
+                        label="Basic example"
+                        value={createdAt}
+                        onChange={handleDate}
+                        renderInput={(params : any ) => <TextField {...params} />}
+                    />*/}
                     <Button
                         type={'submit'}
                         variant={'contained'}
                         className={classes.formButtonBlock}
                         color={'primary'}>
                         Search
+                        onChange={handleSubmit}
                     </Button>
                 </Grid>
             </Grid>
