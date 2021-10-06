@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, Dispatch, KeyboardEventHandler, SetStateAction, useState} from 'react';
+import React, {ChangeEventHandler, Dispatch, KeyboardEventHandler, SetStateAction, useEffect, useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 /*import DatePicker from '@mui/lab/DatePicker';*/
 import Grid from '@material-ui/core/Grid';
@@ -6,8 +6,10 @@ import TextField from "@material-ui/core/TextField";
 import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import {Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select} from "@material-ui/core";
-import {SongQueryObjectType} from "../../api/api";
+import {Button, Checkbox, FormControl, Input, InputLabel, ListItemText, MenuItem, Select} from "@material-ui/core";
+import {authorsAPI, SongQueryObjectType} from "../../api/api";
+import {muiTheme} from "../common/theme/theme";
+import {AuthorType} from "./AddSongForm";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,6 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         filterHeader: {
             marginBottom: "20px",
+        },
+        formControl : {
+            margin: theme.spacing(1),
+            minWidth: 120,
+            maxWidth: 190,
         },
         search: {
             display: "flex",
@@ -38,6 +45,39 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 190,
+        },
+    },
+};
+
+const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+];
+
+function getStyles(name: string, personName: string[], theme: Theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
+
 export interface QuerySongFormPropsType {
     handleSubmitCallBack: (songQueryObject: SongQueryObjectType) => void
 }
@@ -47,13 +87,28 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
 
     const classes = useStyles();
 
+    /*const [personName, setPersonName] = React.useState<string[]>([]);*/
+
     const [songTitle, setSongTitle] = useState<string>('');
     const [createdAt, setCreatedAt] = React.useState<string>('');
     /*const [createdAt, setCreatedAt] = React.useState<string>(moment(new Date()).format('YYYY-MM-DD'));*/
     const [authorName, setAuthorName] = useState<string>('');
     const [offset, setOffset] = useState<string>('');
     const [limit, setLimit] = useState<string>('');
-    const [authorList, setAuthorList] = useState<Array<string>>(["6a2244a8-6285-456d-a9ed-cd501d94f847"]);
+    const [checkedAuthorList, setCheckedAuthorList] = useState<Array<string>>([]);
+    const [checkboxAuthorList, setCheckboxAuthorList ] = useState<Array<AuthorType>>([]);
+
+    useEffect(() => {
+        authorsAPI.getAllAuthor(undefined)
+            .then(res => {
+                console.log(res.data);
+                setCheckboxAuthorList(res.data);
+
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
 
     const handleSongTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSongTitle(event.target.value)
@@ -76,6 +131,13 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
         setLimit(value)
     }
 
+    const handleAuthorListChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        /*setAuthorList(event.target.value as string[]);*/
+        setCheckedAuthorList(event.target.value as string[]);
+
+    };
+    console.log(checkedAuthorList);
+
     const handleSubmit = () => {
         const querySongObject = {
             params: {
@@ -94,9 +156,9 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                 ...(createdAt !== '' && {
                     createdAtSong: createdAt
                 }),
-                /*...(authorList !== undefined && {
-                    authorList: authorList
-                }),*/
+                ...(checkedAuthorList.length > 0  && {
+                    authorList: checkedAuthorList
+                }),
             }
         }
         handleSubmitCallBack(querySongObject)
@@ -177,6 +239,28 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         }}
                         onChange={handleCreatedAt}
                     />
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
+                        <Select
+                            labelId="demo-mutiple-name-label"
+                            id="demo-mutiple-name"
+                            multiple
+                            value={checkedAuthorList}
+                            onChange={handleAuthorListChange}
+                            input={<Input />}
+                            MenuProps={MenuProps}
+                        >
+                            {checkboxAuthorList.map((author) => (
+                                <MenuItem
+                                    key={author.uuid}
+                                    value={author.uuid}
+                                    style={getStyles(author.name, checkedAuthorList, muiTheme)}
+                                >
+                                    {author.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button
                         type={'submit'}
                         variant={'contained'}
