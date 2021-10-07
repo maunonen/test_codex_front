@@ -1,8 +1,9 @@
 import React from 'react'
 import {Redirect, Switch, Route} from 'react-router-dom'
 import {SongPage} from "../pages/SongPage";
-import {AuthorPage} from "../pages/AuthorPage";
+/*import {AuthorPage} from "../pages/AuthorPage";*/
 import NotFoundPage from "../pages/NotFoundPage";
+import AuthorPage from "../pages/AuthorPage";
 
 export const PATH = {
     ALL_ROUTES: '*',

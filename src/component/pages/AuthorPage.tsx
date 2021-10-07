@@ -1,82 +1,141 @@
-import React, {useEffect} from 'react';
-import {Paper} from "@material-ui/core";
-import {makeStyles} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from "@material-ui/core/Typography";
+import React, {useState} from 'react'
+import {useFormik} from "formik";
+import * as Yup from 'yup';
+import {useHistory} from "react-router-dom";
+import {
+    Button, Card, createStyles, FormControl, FormGroup, Checkbox,
+    Grid, makeStyles, TextField, Theme, Typography, FormControlLabel, Link
+} from "@material-ui/core";
+import {authorsAPI, NewAuthorObjectType} from "../../api/api";
+import {PATH} from "../router/Routes";
+import {Alert} from "@material-ui/lab";
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme>(theme => createStyles({
     root: {
-        marginTop: "40px",
+        textAlign: "center",
+        padding: "30px 30px",
+        width: "413px",
+    },
+    formTitle: {
+        marginBottom: "30px",
+    },
+    formSubtitle: {
         marginBottom: "40px",
-        minWidth: 750,
     },
-    paper: {
-        margin: 'auto',
-        maxWidth: 1200,
+    formDescription: {
+        marginBottom: "40px",
     },
-    filterBlock: {
-        backgroundColor: "#ECECF9",
-        maxWidth: "250px",
-        padding: "30px",
-        flexGrow: 1,
+    formButtonBlock: {
+        marginTop: "15px",
+        /*display: "flex",*/
+        alignItems: "",
     },
-    mainBlock: {
-        width: "fit-content",
-        flexGrow: 3,
-        margin: "30px",
-        maxWidth: "950px",
-        boxSizing: "border-box",
+    displayStretch: {
+        display: "flex",
+        alignItems: "stretch"
     },
-    mainSearchBlock: {
-        marginBottom: "20px",
+    textFieldArea: {
+        margin: "0px 10px"
     },
-    mainSearchHeader: {
-        marginBottom: "20px",
-    },
+}))
 
-}));
+const AuthorPage: React.FC = () => {
 
-export const AuthorPage: React.FC = () => {
-    const classes = useStyles();
+    const classes = useStyles()
+    const history = useHistory()
+    const [error, setError] = useState<string | null>(null)
 
-    return (
-        <div className={classes.root}>
-            <Paper
-                elevation={4}
-                className={classes.paper}
-                square={false}
-            >
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="stretch"
-                >
-                    <Grid
-                        item
-                        className={classes.mainBlock}
-                    >
-                        <Grid
-                            item
-                            className={classes.mainSearchBlock}
-                            alignItems={"stretch"}
-                        >
-                            <Typography
-                                variant={"h2"}
-                                className={classes.mainSearchHeader}
-                            >
-                                Author page
-                            </Typography>
-                        </Grid>
-                        <Grid
-                            item
-                            alignItems={"stretch"}
-                        >
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </div>
-    )
+    const restoreSchema = Yup.object().shape({
+        name: Yup.string().required('Name is required'),
+        label: Yup.string(),
+    });
+
+
+    const showMessage = (message: string, showTime: number) => {
+        setError(message)
+        setTimeout(() => {
+            setError(null)
+        }, showTime)
+    }
+
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            label: '',
+        },
+        validationSchema: restoreSchema,
+        onSubmit: (values) => {
+            const authorObject: NewAuthorObjectType = {
+                name: values.name,
+                label: values.label
+            }
+            authorsAPI.addAuthor(authorObject)
+                .then(res => {
+                    console.log("object added", res.data);
+                    history.push(PATH.SONGS);
+                })
+                .catch(err => {
+                    console.log('Something went wrong ', err.response?.data?.error);
+                    showMessage(err.response?.data?.error, 3000);
+                })
+
+            formik.resetForm()
+        },
+    })
+
+    return <Grid
+        container
+        justify="center"
+        alignItems="center"
+        style={{minHeight: '100vh'}}
+    >
+        <Grid item>
+            <Card className={classes.root}>
+                <form onSubmit={formik.handleSubmit}>
+                    <Typography
+                        variant={"h2"}
+                        className={classes.formSubtitle}
+                    >Add author name</Typography>
+                    {
+                        error && (<Alert severity="error">{error}</Alert>)
+                    }
+                    <FormControl className={classes.displayStretch}>
+                        <FormGroup className={classes.textFieldArea}>
+                            <TextField
+                                type="text"
+                                label="Name"
+                                margin="dense"
+                                {...formik.getFieldProps('name')}
+                            />
+                            {formik.touched.name && formik.errors.name &&
+                            <div style={{color: 'red'}}>{formik.errors.name}</div>
+                            }
+                            <TextField
+                                type="text"
+                                label="Label"
+                                margin="dense"
+                                {...formik.getFieldProps('label')}
+                            />
+                            {formik.touched.label && formik.errors.label &&
+                            <div style={{color: 'red'}}>{formik.errors.label}</div>
+                            }
+                            <div className={classes.formButtonBlock}>
+
+                                <Button
+                                    type={'submit'}
+                                    variant={'contained'}
+                                    className={classes.formButtonBlock}
+                                    color={'primary'}>
+                                    Add Author
+                                </Button>
+                            </div>
+                        </FormGroup>
+                    </FormControl>
+                </form>
+            </Card>
+        </Grid>
+    </Grid>
 }
+export default AuthorPage

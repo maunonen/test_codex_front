@@ -37,8 +37,8 @@ export interface SongQueryObjectType {
 
 export interface NewAuthorObjectType {
     name: string
-    birthday: string
     label: string
+    /*birthday: string*/
 }
 
 export interface QueryAuthorsObjectType {
