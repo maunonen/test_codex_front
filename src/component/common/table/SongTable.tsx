@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-    Button, FormControl, Input, InputLabel, NativeSelect,
     Paper,
     Table,
     TableBody,
@@ -8,31 +7,11 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField
 } from "@material-ui/core";
 import {SongType} from "../../pages/SongPage";
-import moment from "moment";
-import ModalForm from "../modal/ModalForm";
-import {AddSongObjectType, SongUpdateObjectType} from "../../../api/api";
+import {SongUpdateObjectType} from "../../../api/api";
 import {AuthorType} from "../../query/AddSongForm";
 import SongTableRow from "./SongTableRow";
-
-function createData(
-    title: string,
-    author: string,
-    createdAt: string,
-    duartion: number,
-) {
-    return {title, author, createdAt, duartion};
-}
-
-const rows = [
-    createData('15 step', 'radioheade', '2020-05-05', 140),
-    createData('15 step', 'radioheade', '2020-05-05', 140),
-    createData('15 step', 'radioheade', '2020-05-05', 140),
-    createData('15 step', 'radioheade', '2020-05-05', 140),
-    createData('15 step', 'radioheade', '2020-05-05', 140),
-];
 
 export interface SongTablePropsType {
     songArray: Array<SongType>
@@ -68,9 +47,7 @@ const SongTable: React.FC<SongTablePropsType> = (props) => {
     const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDuration(event.target.value)
     }
-    /*const handleAuthorUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuthorUuid(event.target.value)
-    }*/
+
     const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setAuthorUuid(event.target.value as string);
     };
@@ -96,93 +73,6 @@ const SongTable: React.FC<SongTablePropsType> = (props) => {
                             handleUpdateCallback={handleUpdateCallback}
                             authorArray={authorArray}
                         />
-                        /*<TableRow
-                            key={song.uuid}
-                            /!*sx={{ '&:last-child td, &:last-child th': { border: 0 } }}*!/
-                        >
-                            <TableCell component="th" scope="row">
-                                {song.title}
-                            </TableCell>
-                            <TableCell align="right">{song.author && song.author.name}</TableCell>
-                            <TableCell align="right">{song.duration}</TableCell>
-                            <TableCell align="right">{moment(song.createdAt).format("DD.MM.YYYY")}</TableCell>
-                            <TableCell align="right">
-                                <Button
-                                    type={'submit'}
-                                    variant={'contained'}
-                                    onClick={() => {
-                                        handleDeleteCallback && handleDeleteCallback(song.uuid)
-                                    }}
-                                    /!*className={classes.formButtonBlock}*!/
-                                    color={'primary'}>
-                                    Delete
-                                </Button>
-                                <Button
-                                    type={'submit'}
-                                    variant={'contained'}
-                                    /!*className={classes.formButtonBlock}*!/
-                                    onClick={() => {
-                                        setModalEditStatus(true)
-                                    }}
-                                    color={'primary'}>
-                                    Update
-                                </Button>
-                                <ModalForm
-                                    modalTitle={"Edit song"}
-                                    actionButtonTitle={"Edit"}
-                                    openStatus={modalEditStatus}
-                                    handleCloseModal={setModalEditStatus}
-                                    modalActionCallback={() => {
-                                        handleEditSong(song.uuid)
-                                    }}
-                                >
-                                    <>
-                                        <TextField
-                                            value={title === null ? song.title : title}
-                                            onChange={handleTitleUpdate}
-                                            margin="dense"
-                                            label="Title"
-                                            type="string"
-                                            fullWidth
-                                        />
-                                        <TextField
-                                            value={duration === null ? song.duration : duration}
-                                            onChange={handleDurationUpdate}
-                                            margin="dense"
-                                            label="Duration"
-                                            type="string"
-                                            fullWidth
-                                        />
-                                        <TextField
-                                            value={authorUuid === null ? song.author.uuid : authorUuid}
-                                            onChange={handleAuthorUpdate}
-                                            margin="dense"
-                                            label="Author"
-                                            type="string"
-                                            fullWidth
-                                        />
-                                        <FormControl
-                                            className={classes.search}
-                                        >
-                                            <InputLabel htmlFor="demo-customized-select-native">Author</InputLabel>
-                                            <NativeSelect
-                                                placeholder={"Author"}
-                                                value={authorUuid}
-                                                onChange={handleAuthorCheckBoxChange}
-                                                input={<Input/>}
-                                            >
-                                                <option aria-label="None" value="Author"/>
-                                                {
-                                                    authorArray && authorArray.map(author => {
-                                                        return <option value={author.uuid}>{author.name}</option>
-                                                    })
-                                                }
-                                            </NativeSelect>
-                                        </FormControl>
-                                    </>
-                                </ModalForm>
-                            </TableCell>
-                        </TableRow>*/
                     ))}
                 </TableBody>
             </Table>

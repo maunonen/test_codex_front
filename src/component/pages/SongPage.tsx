@@ -1,18 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-/*import RangeShowCard from './RangeShowCard';*/
-import {useDispatch, useSelector} from "react-redux";
-
-import {Card, Paper} from "@material-ui/core";
-/*import DeckTable from "../../common/c8-Table/DeckTable";*/
-/*import Search from './Search';*/
-import Typography from "@material-ui/core/Typography";
-import {QuerySongForm} from "../query/QuerySongForm";
-import SongTable from '../common/table/SongTable';
-import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
 import {AddSongPage, AuthorType as AuthorResponseType} from "../query/AddSongForm";
-
+import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
+import {makeStyles} from '@material-ui/core/styles';
+import {QuerySongForm} from "../query/QuerySongForm";
+import {Paper} from "@material-ui/core";
+import Grid from '@material-ui/core/Grid';
+import Typography from "@material-ui/core/Typography";
+import SongTable from '../common/table/SongTable';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +106,7 @@ export const SongPage: React.FC = () => {
 
     const classes = useStyles();
     const [songArray, setSongArray] = useState<Array<SongType>>([]);
-    const [authorArray , setAuthorArray] = useState<Array<AuthorResponseType>>([]);
+    const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
 
     async function getAllSongs(queryObject: SongQueryObjectType | undefined) {
         try {
@@ -124,11 +118,11 @@ export const SongPage: React.FC = () => {
         }
     }
 
-    async function  getAllAuthors () {
+    async function getAllAuthors() {
         try {
             let response = await authorsAPI.getAllAuthor()
             setAuthorArray(response.data)
-        } catch (err){
+        } catch (err) {
             console.log(err);
         }
     }
@@ -156,7 +150,7 @@ export const SongPage: React.FC = () => {
             })
     }
 
-    const handleUpdateSong = (uuid : string, updatedObject : SongUpdateObjectType) => {
+    const handleUpdateSong = (uuid: string, updatedObject: SongUpdateObjectType) => {
         songsAPI.updateSong(uuid, updatedObject)
             .then(res => {
                 console.log("Song has been deleted");
@@ -167,7 +161,7 @@ export const SongPage: React.FC = () => {
             })
     }
 
-    const handleAddSong = ( songObject : AddSongObjectType) => {
+    const handleAddSong = (songObject: AddSongObjectType) => {
         songsAPI.addSong(songObject)
             .then(res => {
                 console.log("Song has been deleted");
@@ -214,18 +208,16 @@ export const SongPage: React.FC = () => {
                             >
                                 List of song
                                 <div>
-                                <AddSongPage
-                                    authorArray={authorArray}
-                                    handleAddSongCallBack={handleAddSong}
-                                />
+                                    <AddSongPage
+                                        authorArray={authorArray}
+                                        handleAddSongCallBack={handleAddSong}
+                                    />
 
                                 </div>
                             </Typography>
-                            {/*<QuerySongForm/>*/}
                         </Grid>
                         <Grid
                             item
-                            /*className={classes.mainTableBlock}*/
                             alignItems={"stretch"}
                         >
                             <SongTable

@@ -16,7 +16,6 @@ export interface ModalPropsType {
     modalActionCallback: () => void
     actionButtonTitle: string
     children?: JSX.Element
-    // close Modal Window after action
     closeAfterAction?: boolean
 }
 

@@ -1,11 +1,7 @@
 import React, {useEffect} from 'react';
+import {Paper} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {useDispatch, useSelector} from "react-redux";
-
-import {Card, Paper} from "@material-ui/core";
-/*import DeckTable from "../../common/c8-Table/DeckTable";*/
-/*import Search from './Search';*/
 import Typography from "@material-ui/core/Typography";
 
 
@@ -41,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export const AuthorPage: React.FC = () =>  {
+export const AuthorPage: React.FC = () => {
     const classes = useStyles();
 
     return (
@@ -72,11 +68,9 @@ export const AuthorPage: React.FC = () =>  {
                             >
                                 Author page
                             </Typography>
-                            {/*<Search/>*/}
                         </Grid>
                         <Grid
                             item
-                            /*className={classes.mainTableBlock}*/
                             alignItems={"stretch"}
                         >
                         </Grid>

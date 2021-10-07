@@ -1,7 +1,5 @@
 import React from 'react'
-import {NavLink, useHistory, useParams} from 'react-router-dom'
-/*import s from './Header.module.css'*/
-/*import {PATH} from "../Routes";*/
+import { useHistory, useParams} from 'react-router-dom'
 import {
     AppBar,
     Button, createStyles,
@@ -12,13 +10,7 @@ import {
     Toolbar,
     Typography
 } from "@material-ui/core";
-/*import {Menu} from "@material-ui/icons";*/
-import {useDispatch, useSelector} from "react-redux";
 import {PATH} from "../router/Routes";
-
-/*import {AppStoreType} from "../../m2-bll/redux/store";*/
-
-/*import { logoutTC } from '../../m2-bll/redux/auth-reducer';*/
 
 const useStyles = makeStyles<Theme>(theme => createStyles({
     root: {
@@ -40,12 +32,8 @@ const useStyles = makeStyles<Theme>(theme => createStyles({
 }))
 
 const Header: React.FC = () => {
-    /*const {appStatus} = useSelector((state: AppStoreType) => state.app)*/
     const history = useHistory()
     const classes = useStyles()
-    /*const dispatch = useDispatch()*/
-    /*const isLoggedIn = useSelector<AppStoreType, boolean>((state) => state.auth.isLoggedIn)*/
-
 
     return (
         <div>

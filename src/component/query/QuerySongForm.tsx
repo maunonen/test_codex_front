@@ -1,15 +1,12 @@
-import React, {ChangeEventHandler, Dispatch, KeyboardEventHandler, SetStateAction, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-/*import DatePicker from '@mui/lab/DatePicker';*/
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
-import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
-import moment from "moment";
-import {Button, Checkbox, FormControl, Input, InputLabel, ListItemText, MenuItem, Select} from "@material-ui/core";
-import {authorsAPI, SongQueryObjectType} from "../../api/api";
+import {Button, Checkbox, FormControl, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
 import {muiTheme} from "../common/theme/theme";
 import {AuthorType} from "./AddSongForm";
+import {authorsAPI, SongQueryObjectType} from "../../api/api";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
         filterHeader: {
             marginBottom: "20px",
         },
-        formControl : {
+        formControl: {
             margin: theme.spacing(1),
             minWidth: 120,
             maxWidth: 190,
@@ -87,16 +84,13 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
 
     const classes = useStyles();
 
-    /*const [personName, setPersonName] = React.useState<string[]>([]);*/
-
     const [songTitle, setSongTitle] = useState<string>('');
     const [createdAt, setCreatedAt] = React.useState<string>('');
-    /*const [createdAt, setCreatedAt] = React.useState<string>(moment(new Date()).format('YYYY-MM-DD'));*/
     const [authorName, setAuthorName] = useState<string>('');
     const [offset, setOffset] = useState<string>('');
     const [limit, setLimit] = useState<string>('');
     const [checkedAuthorList, setCheckedAuthorList] = useState<Array<string>>([]);
-    const [checkboxAuthorList, setCheckboxAuthorList ] = useState<Array<AuthorType>>([]);
+    const [checkboxAuthorList, setCheckboxAuthorList] = useState<Array<AuthorType>>([]);
 
     useEffect(() => {
         authorsAPI.getAllAuthor(undefined)
@@ -122,17 +116,14 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
 
     const handleOffset = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value = event.target.value
-        /*if (!isFinite(+value)) return;*/
         setOffset(value);
     }
     const handleLimit = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value = event.target.value
-        /*if (!isFinite(+value)) return;*/
         setLimit(value)
     }
 
     const handleAuthorListChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        /*setAuthorList(event.target.value as string[]);*/
         setCheckedAuthorList(event.target.value as string[]);
 
     };
@@ -156,7 +147,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                 ...(createdAt !== '' && {
                     createdAtSong: createdAt
                 }),
-                ...(checkedAuthorList.length > 0  && {
+                ...(checkedAuthorList.length > 0 && {
                     authorList: checkedAuthorList
                 }),
             }
@@ -204,7 +195,6 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         onChange={handleAuthorNameChange}
                     />
                     <TextField
-                        /*type={"number"}*/
                         value={offset}
                         size={"small"}
                         className={classes.search}
@@ -215,7 +205,6 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         onChange={handleOffset}
                     />
                     <TextField
-                        /*type={"number"}*/
                         value={limit}
                         size={"small"}
                         className={classes.search}
@@ -232,8 +221,6 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         style={{backgroundColor: "#ECECF9"}}
                         label="createdAt"
                         type="date"
-                        /*defaultValue="2017-05-24"*/
-                        /*defaultValue={moment(new Date()).format('YYYY-MM-DD')}*/
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -247,7 +234,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                             multiple
                             value={checkedAuthorList}
                             onChange={handleAuthorListChange}
-                            input={<Input />}
+                            input={<Input/>}
                             MenuProps={MenuProps}
                         >
                             {checkboxAuthorList.map((author) => (

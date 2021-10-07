@@ -8,9 +8,9 @@ import {AuthorType} from "../../query/AddSongForm";
 
 export interface SongTableRowPropsType {
     song: SongType
+    authorArray: Array<AuthorType>
     handleDeleteCallback: (uuid: string) => void
     handleUpdateCallback: (uuid: string, updatedObject: SongUpdateObjectType) => void
-    authorArray : Array<AuthorType>
 }
 
 export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
@@ -26,7 +26,7 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
             ...(title !== '' && {
                 title
             }),
-            ...(( duration && isFinite(+duration)) && {
+            ...((duration && isFinite(+duration)) && {
                 duration: Number(duration)
             }),
             ...(authorUuid !== '' && {
@@ -41,8 +41,7 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
         setTitle(event.target.value)
     }
     const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        /*console.log(event.target.value);*/
-        if (/\D+/.test(event.target.value)) return ;
+        if (/\D+/.test(event.target.value)) return;
         setDuration(Number(+event.target.value));
     }
     const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -52,7 +51,6 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
     return (
         <TableRow
             key={song.uuid}
-            /*sx={{ '&:last-child td, &:last-child th': { border: 0 } }}*/
         >
             <TableCell component="th" scope="row">
                 {song.title}
@@ -67,14 +65,12 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
                     onClick={() => {
                         handleDeleteCallback && handleDeleteCallback(song.uuid)
                     }}
-                    /*className={classes.formButtonBlock}*/
                     color={'primary'}>
                     Delete
                 </Button>
                 <Button
                     type={'submit'}
                     variant={'contained'}
-                    /*className={classes.formButtonBlock}*/
                     onClick={() => {
                         setModalEditStatus(true)
                     }}
@@ -107,17 +103,7 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
                             type="string"
                             fullWidth
                         />
-                        {/*<TextField
-                                            value={authorUuid === null ? song.author.uuid : authorUuid}
-                                            onChange={handleAuthorUpdate}
-                                            margin="dense"
-                                            label="Author"
-                                            type="string"
-                                            fullWidth
-                                        />*/}
-                        <FormControl
-                            /*className={classes.search}*/
-                        >
+                        <FormControl>
                             <InputLabel htmlFor="demo-customized-select-native">Author</InputLabel>
                             <NativeSelect
                                 placeholder={"Author"}
@@ -125,7 +111,6 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
                                 onChange={handleAuthorCheckBoxChange}
                                 input={<Input/>}
                             >
-                                {/*<option aria-label="None" value={song.author.uuid}>{song.author.name}</option>*/}
                                 {
                                     authorArray && authorArray.map(author => {
                                         return <option value={author.uuid}>{author.name}</option>
