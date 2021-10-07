@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface AddSongFormPropsType {
+    authorArray : AuthorType[]
     handleAddSongCallBack: (songQueryObject: AddSongObjectType) => void
 }
 
@@ -70,16 +71,16 @@ export interface SongType {
 
 
 export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
-    const {handleAddSongCallBack} = props
+    const {handleAddSongCallBack, authorArray} = props
 
     const classes = useStyles();
 
     const [songTitle, setSongTitle] = useState<string>('');
     const [duration, setDuration] = useState<string>('');
     const [authorUuid, setAuthorUuid] = useState<string>("b84ccaa0-d897-48e7-9c2b-95bc4905a4ab");
-    const [authorArray , setAuthorArray] = useState<Array<AuthorType>>([]);
+    /*const [authorArray , setAuthorArray] = useState<Array<AuthorType>>([]);*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         authorsAPI.getAllAuthor(undefined)
             .then(res => {
                 console.log(res.data);
@@ -89,7 +90,7 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [])*/
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSongTitle(event.target.value)
@@ -164,7 +165,7 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
                                 onChange={handleAuthorChange}
                                 input={<Input/>}
                             >
-                                <option aria-label="None" value="Author"/>
+                                {/*<option aria-label="None" value="Author"/>*/}
                                 {
                                     authorArray && authorArray.map(author => {
                                         return <option value={author.uuid}>{author.name}</option>

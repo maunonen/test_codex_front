@@ -10,8 +10,9 @@ import {Card, Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {QuerySongForm} from "../query/QuerySongForm";
 import SongTable from '../common/table/SongTable';
-import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI} from "../../api/api";
-import {AddSongPage} from "../query/AddSongForm";
+import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
+import {AddSongPage, AuthorType as AuthorResponseType} from "../query/AddSongForm";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -111,6 +112,7 @@ export const SongPage: React.FC = () => {
 
     const classes = useStyles();
     const [songArray, setSongArray] = useState<Array<SongType>>([]);
+    const [authorArray , setAuthorArray] = useState<Array<AuthorResponseType>>([]);
 
     async function getAllSongs(queryObject: SongQueryObjectType | undefined) {
         try {
@@ -122,10 +124,20 @@ export const SongPage: React.FC = () => {
         }
     }
 
+    async function  getAllAuthors () {
+        try {
+            let response = await authorsAPI.getAllAuthor()
+            setAuthorArray(response.data)
+        } catch (err){
+            console.log(err);
+        }
+    }
+
 
     useEffect(() => {
         console.log("Use effect",)
         getAllSongs(undefined);
+        getAllAuthors();
     }, [])
 
     const handleSubmit = (queryObject: SongQueryObjectType) => {
@@ -143,6 +155,18 @@ export const SongPage: React.FC = () => {
                 console.log('Something went wrong', err);
             })
     }
+
+    const handleUpdateSong = (uuid : string, updatedObject : SongUpdateObjectType) => {
+        songsAPI.updateSong(uuid, updatedObject)
+            .then(res => {
+                console.log("Song has been deleted");
+                getAllSongs(undefined);
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
+    }
+
     const handleAddSong = ( songObject : AddSongObjectType) => {
         songsAPI.addSong(songObject)
             .then(res => {
@@ -191,6 +215,7 @@ export const SongPage: React.FC = () => {
                                 List of song
                                 <div>
                                 <AddSongPage
+                                    authorArray={authorArray}
                                     handleAddSongCallBack={handleAddSong}
                                 />
 
@@ -205,7 +230,9 @@ export const SongPage: React.FC = () => {
                         >
                             <SongTable
                                 songArray={songArray}
+                                authorArray={authorArray}
                                 handleDeleteCallback={handleDeleteSong}
+                                handleUpdateCallback={handleUpdateSong}
                             />
                         </Grid>
                     </Grid>

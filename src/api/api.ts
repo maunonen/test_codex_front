@@ -11,14 +11,15 @@ const instance = axios.create({
 export interface AddSongObjectType {
     title: string
     duration?: number
-    authorUuid : string
+    authorUuid: string
 }
 
 export interface SongUpdateObjectType {
-    title? : string
-    duration? : number
-    authorUuid? : string
+    title?: string | null
+    duration?: number | null
+    authorUuid?: string | null
 }
+
 export interface SongQueryObjectType {
     params?: {
         songTitle?: string
@@ -26,7 +27,7 @@ export interface SongQueryObjectType {
         limit?: number
         offset?: number
         createdAtSong?: string
-        authorList? : Array<string>
+        authorList?: Array<string>
     }
 }
 
@@ -37,51 +38,52 @@ export interface SongQueryObjectType {
 export interface NewAuthorObjectType {
     name: string
     birthday: string
-    label : string
+    label: string
 }
+
 export interface QueryAuthorsObjectType {
-    params? : {
+    params?: {
         authorList?: Array<string>
-        authorName? :string
+        authorName?: string
         songTitle?: string
         createdAtAuthor?: string
-        limit : number
-        offset : number
+        limit: number
+        offset: number
     }
 }
 
 export const songsAPI = {
-    addSong(songObject : AddSongObjectType) {
+    addSong(songObject: AddSongObjectType) {
         return instance.post<any>("/api/songs", songObject);
     },
-    deleteSong(uuid : string) {
+    deleteSong(uuid: string) {
         return instance.delete<any>(`/api/songs/${uuid}`);
     },
-    updateSong(uuid : string, updateObject : SongUpdateObjectType) {
-        return instance.put<any>("/api/songs", updateObject, {params: {uuid}})
+    updateSong(uuid: string, updateObject: SongUpdateObjectType) {
+        return instance.put<any>(`/api/songs/${uuid}`, updateObject);
     },
-    getAllSong( queryObject  : SongQueryObjectType | undefined) {
+    getAllSong(queryObject: SongQueryObjectType | undefined) {
         return instance.get<any>("/api/songs", queryObject);
     },
-    getSongByID(uuid : string) {
+    getSongByID(uuid: string) {
         return instance.get<any>("/api/songs", {params: {uuid}});
     },
 }
 
 export const authorsAPI = {
-    addAuthor(authorObject : NewAuthorObjectType) {
+    addAuthor(authorObject: NewAuthorObjectType) {
         return instance.post<any>("/api/authors", authorObject);
     },
-    deleteAuthor(uuid : string) {
+    deleteAuthor(uuid: string) {
         return instance.delete<any>(`/api/authors/${uuid}`);
     },
-    updateAuthor(uuid : string, updateAuthorObject : NewAuthorObjectType) {
+    updateAuthor(uuid: string, updateAuthorObject: NewAuthorObjectType) {
         return instance.put<any>(`/api/authors/${uuid}`, updateAuthorObject);
     },
-    getAllAuthor( queryObject : QueryAuthorsObjectType | undefined) {
+    getAllAuthor(queryObject?: QueryAuthorsObjectType) {
         return instance.get<any>("/api/authors", queryObject);
     },
-    getAuthorByID(uuid : string) {
+    getAuthorByID(uuid: string) {
         return instance.get<any>(`/api/authors/${uuid}`);
     },
 }
