@@ -5,8 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import {Button, Checkbox, FormControl, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
 import {muiTheme} from "../common/theme/theme";
-import {AuthorType} from "./AddSongForm";
-import {authorsAPI, SongQueryObjectType} from "../../api/api";
+import {authorsAPI, QueryAuthorsObjectType, SongQueryObjectType} from "../../api/api";
+import {AuthorType} from "../pages/AuthorPage";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,16 +62,14 @@ function getStyles(name: string, personName: string[], theme: Theme) {
     };
 }
 
-export interface QuerySongFormPropsType {
-    handleSubmitCallBack: (songQueryObject: SongQueryObjectType) => void
+export interface QueryAuthorFormPropsType {
+    handleSubmitCallBack: (songQueryObject: QueryAuthorsObjectType) => void
 }
 
-export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
+export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
     const {handleSubmitCallBack} = props
-
     const classes = useStyles();
 
-    const [songTitle, setSongTitle] = useState<string>('');
     const [createdAt, setCreatedAt] = React.useState<string>('');
     const [authorName, setAuthorName] = useState<string>('');
     const [offset, setOffset] = useState<string>('');
@@ -91,16 +89,12 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
             })
     }, [])
 
-    const handleSongTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSongTitle(event.target.value)
-    }
     const handleAuthorNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorName(event.target.value)
     }
     const handleCreatedAt = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCreatedAt(event.target.value);
     };
-
     const handleOffset = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value = event.target.value
         setOffset(value);
@@ -116,11 +110,8 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
     };
 
     const handleSubmit = () => {
-        const querySongObject : SongQueryObjectType = {
+        const querySongObject : QueryAuthorsObjectType = {
             params: {
-                ...(songTitle !== '' && {
-                    songTitle
-                }),
                 ...(authorName !== '' && {
                     authorName
                 }),
@@ -138,7 +129,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                 }),
             }
         }
-        handleSubmitCallBack && handleSubmitCallBack(querySongObject)
+        handleSubmitCallBack && handleSubmitCallBack(querySongObject);
         console.log(querySongObject);
     }
 
@@ -158,18 +149,8 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                         variant={"h2"}
                         className={classes.filterHeader}
                     >
-                        Filter songs
+                        Filter authors
                     </Typography>
-                    <TextField
-                        value={songTitle}
-                        size={"small"}
-                        className={classes.search}
-                        style={{backgroundColor: "#ECECF9"}}
-                        label="Song title"
-                        placeholder="Song title"
-                        variant="outlined"
-                        onChange={handleSongTitleChange}
-                    />
                     <TextField
                         value={authorName}
                         size={"small"}

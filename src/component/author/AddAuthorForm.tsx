@@ -3,8 +3,8 @@ import {useFormik} from "formik";
 import * as Yup from 'yup';
 import {useHistory} from "react-router-dom";
 import {
-    Button, Card, createStyles, FormControl, FormGroup, Checkbox,
-    Grid, makeStyles, TextField, Theme, Typography, FormControlLabel, Link
+    Button, Card, createStyles, FormControl, FormGroup,
+    Grid, makeStyles, TextField, Theme, Typography,
 } from "@material-ui/core";
 import {authorsAPI, NewAuthorObjectType} from "../../api/api";
 import {PATH} from "../router/Routes";
@@ -28,37 +28,32 @@ const useStyles = makeStyles<Theme>(theme => createStyles({
     },
     formButtonBlock: {
         marginTop: "15px",
-        /*display: "flex",*/
-        alignItems: "",
+    },
+    textFieldArea: {
+        margin: "0px 10px",
+        display: "flex"
+    },
+    addAuthorField: {
+        flexGrow: 1,
     },
     displayStretch: {
         display: "flex",
         alignItems: "stretch"
     },
-    textFieldArea: {
-        margin: "0px 10px"
-    },
 }))
 
-const AddAuthorForm: React.FC = () => {
+export interface AddAuthorFormPropsType {
+    handleAddAuthor: (authorObject: NewAuthorObjectType) => void
+}
 
+const AddAuthorForm: React.FC<AddAuthorFormPropsType> = (props) => {
+    const {handleAddAuthor} = props;
     const classes = useStyles()
-    const history = useHistory()
-    const [error, setError] = useState<string | null>(null)
 
     const restoreSchema = Yup.object().shape({
         name: Yup.string().required('Name is required'),
         label: Yup.string(),
     });
-
-
-    const showMessage = (message: string, showTime: number) => {
-        setError(message)
-        setTimeout(() => {
-            setError(null)
-        }, showTime)
-    }
-
 
     const formik = useFormik({
         initialValues: {
@@ -71,39 +66,19 @@ const AddAuthorForm: React.FC = () => {
                 name: values.name,
                 label: values.label
             }
-            authorsAPI.addAuthor(authorObject)
-                .then(res => {
-                    console.log("object added", res.data);
-                    history.push(PATH.SONGS);
-                })
-                .catch(err => {
-                    console.log('Something went wrong ', err.response?.data?.error);
-                    showMessage(err.response?.data?.error, 3000);
-                })
-
-            formik.resetForm()
+            handleAddAuthor && handleAddAuthor(authorObject);
+            formik.resetForm();
         },
     })
 
-    return <Grid
-        container
-        justify="center"
-        alignItems="center"
-        style={{minHeight: '100vh'}}
-    >
-        <Grid item>
-            <Card className={classes.root}>
-                <form onSubmit={formik.handleSubmit}>
-                    <Typography
-                        variant={"h2"}
-                        className={classes.formSubtitle}
-                    >Add author name</Typography>
-                    {
-                        error && (<Alert severity="error">{error}</Alert>)
-                    }
-                    <FormControl className={classes.displayStretch}>
-                        <FormGroup className={classes.textFieldArea}>
+    return (
+
+        <Grid>
+            <form onSubmit={formik.handleSubmit}>
+                <FormControl className={classes.displayStretch}>
+                    <FormGroup className={classes.textFieldArea}>
                             <TextField
+                                /*className={classes.addAuthorField}*/
                                 type="text"
                                 label="Name"
                                 margin="dense"
@@ -113,6 +88,7 @@ const AddAuthorForm: React.FC = () => {
                             <div style={{color: 'red'}}>{formik.errors.name}</div>
                             }
                             <TextField
+                                /*className={classes.addAuthorField}*/
                                 type="text"
                                 label="Label"
                                 margin="dense"
@@ -122,7 +98,6 @@ const AddAuthorForm: React.FC = () => {
                             <div style={{color: 'red'}}>{formik.errors.label}</div>
                             }
                             <div className={classes.formButtonBlock}>
-
                                 <Button
                                     type={'submit'}
                                     variant={'contained'}
@@ -131,11 +106,10 @@ const AddAuthorForm: React.FC = () => {
                                     Add Author
                                 </Button>
                             </div>
-                        </FormGroup>
-                    </FormControl>
-                </form>
-            </Card>
+                    </FormGroup>
+                </FormControl>
+            </form>
         </Grid>
-    </Grid>
+    )
 }
 export default AddAuthorForm

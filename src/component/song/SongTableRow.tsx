@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import {Button, FormControl, Input, InputLabel, NativeSelect, TableCell, TableRow, TextField} from "@material-ui/core";
 import moment from "moment";
-import ModalForm from "../modal/ModalForm";
-import {SongType} from "../../pages/SongPage";
-import {SongUpdateObjectType} from "../../../api/api";
-import {AuthorType} from "../../song/AddSongForm";
+import ModalForm from "../common/modal/ModalForm";
+import {SongType} from "../pages/SongPage";
+import {SongUpdateObjectType} from "../../api/api";
+import {AuthorType} from "./AddSongForm";
 
 export interface SongTableRowPropsType {
     song: SongType

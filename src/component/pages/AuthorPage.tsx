@@ -1,20 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {AddSongPage, AuthorType as AuthorResponseType} from "../song/AddSongForm";
+import {AuthorType as AuthorResponseType} from "../song/AddSongForm";
 import {
-    AddSongObjectType,
     authorsAPI, NewAuthorObjectType,
     QueryAuthorsObjectType,
-    SongQueryObjectType,
-    songsAPI,
-    SongUpdateObjectType, UpdateAuthorObjectType
+    UpdateAuthorObjectType
 } from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
-import {QuerySongForm} from "../song/QuerySongForm";
 import {Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
-import SongTable from '../common/table/SongTable';
-import AuthorTable from "../common/table/AuthorTable";
+import AuthorTable from "../author/AuthorTable";
+import {QueryAuthorForm} from "../author/QueryAuthorForm";
+import AddAuthorForm from "../author/AddAuthorForm";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,16 +69,25 @@ export interface AuthorType {
     10 песен, идущих после первых 20-и от начала выборки.
 */
 
+export type ColorType = "error" | "warning" | "info" | "success"
+export type ErrorMessageObjectType = {
+    message : string
+    messageType : ColorType | undefined
+}
+
 export const AuthorPage: React.FC = () => {
 
     const classes = useStyles();
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
+    const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined)
+    const [errorType, setErrorType] = useState<ColorType | undefined>(undefined)
 
-    async function getAllAuthors( queryObject? : QueryAuthorsObjectType) {
+    async function getAllAuthors(queryObject?: QueryAuthorsObjectType) {
         try {
             let response = await authorsAPI.getAllAuthor(queryObject)
             setAuthorArray(response.data)
         } catch (err) {
+            showMessage("Nothing found", 3000, "error" );
             console.log(err);
         }
     }
@@ -97,10 +104,11 @@ export const AuthorPage: React.FC = () => {
     const handleDeleteAuthor = (uuid: string) => {
         authorsAPI.deleteAuthor(uuid)
             .then(res => {
-                console.log("Author has been deleted");
+                showMessage("Author deleted", 3000, "success" );
                 getAllAuthors();
             })
             .catch(err => {
+                showMessage("Something went wrong", 3000, "error" );
                 console.log('Something went wrong', err);
             })
     }
@@ -108,9 +116,11 @@ export const AuthorPage: React.FC = () => {
     const handleUpdateAuthor = (uuid: string, updatedObject: UpdateAuthorObjectType) => {
         authorsAPI.updateAuthor(uuid, updatedObject)
             .then(res => {
+                showMessage("Author updated", 3000, "success" );
                 getAllAuthors();
             })
             .catch(err => {
+                showMessage("Something went wrong", 3000, "error" );
                 console.log('Something went wrong', err);
             })
     }
@@ -118,11 +128,23 @@ export const AuthorPage: React.FC = () => {
     const handleAddAuthor = (authorObject: NewAuthorObjectType) => {
         authorsAPI.addAuthor(authorObject)
             .then(res => {
+                showMessage("Author added", 3000, "success" );
                 getAllAuthors();
             })
             .catch(err => {
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error" );
                 console.log('Something went wrong', err);
             })
+    }
+
+    const showMessage = (message: string, showTime: number, messageType: ColorType) => {
+        let messageObject : ErrorMessageObjectType = {
+            message , messageType
+        };
+        setError(messageObject);
+        setTimeout(() => {
+            setError(undefined);
+        }, showTime)
     }
 
     return (
@@ -142,9 +164,9 @@ export const AuthorPage: React.FC = () => {
                         item
                         className={classes.filterBlock}
                     >
-                        {/*<QuerySongForm
+                        <QueryAuthorForm
                             handleSubmitCallBack={handleSearch}
-                        />*/}
+                        />
                     </Grid>
                     <Grid
                         item
@@ -160,14 +182,15 @@ export const AuthorPage: React.FC = () => {
                                 className={classes.mainSearchHeader}
                             >
                                 Author Page
-                                <div>
-                                    {/*<AddSongPage
-                                        authorArray={authorArray}
-                                        handleAddSongCallBack={handleAddSong}
-                                    />*/}
-
-                                </div>
                             </Typography>
+                            <div>
+                                {
+                                    error && (<Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
+                                }
+                                <AddAuthorForm
+                                    handleAddAuthor={handleAddAuthor}
+                                />
+                            </div>
                         </Grid>
                         <Grid
                             item

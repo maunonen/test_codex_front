@@ -8,9 +8,9 @@ import {
     TableHead,
     TableRow,
 } from "@material-ui/core";
-import {SongType} from "../../pages/SongPage";
-import {SongUpdateObjectType} from "../../../api/api";
-import {AuthorType} from "../../song/AddSongForm";
+import {SongType} from "../pages/SongPage";
+import {SongUpdateObjectType} from "../../api/api";
+import {AuthorType} from "./AddSongForm";
 import SongTableRow from "./SongTableRow";
 
 export interface SongTablePropsType {

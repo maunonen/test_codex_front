@@ -53,8 +53,8 @@ export interface QueryAuthorsObjectType {
         authorName?: string
         songTitle?: string
         createdAtAuthor?: string
-        limit: number
-        offset: number
+        limit?: number
+        offset?: number
     }
 }
 

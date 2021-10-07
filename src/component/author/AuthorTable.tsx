@@ -8,8 +8,8 @@ import {
     TableHead,
     TableRow,
 } from "@material-ui/core";
-import {UpdateAuthorObjectType} from "../../../api/api";
-import {AuthorType} from "../../song/AddSongForm";
+import {UpdateAuthorObjectType} from "../../api/api";
+import {AuthorType} from "../song/AddSongForm";
 import AuthorTableRow from "./AuthorTableRow";
 
 export interface SongTablePropsType {

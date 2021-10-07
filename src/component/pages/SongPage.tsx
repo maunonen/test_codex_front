@@ -6,7 +6,7 @@ import {QuerySongForm} from "../song/QuerySongForm";
 import {Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
-import SongTable from '../common/table/SongTable';
+import SongTable from '../song/SongTable';
 
 
 const useStyles = makeStyles((theme) => ({

@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import {Button, TableCell, TableRow, TextField} from "@material-ui/core";
 import moment from "moment";
-import ModalForm from "../modal/ModalForm";
-import {UpdateAuthorObjectType} from "../../../api/api";
-import {AuthorType} from "../../song/AddSongForm";
+import ModalForm from "../common/modal/ModalForm";
+import {UpdateAuthorObjectType} from "../../api/api";
+import {AuthorType} from "../song/AddSongForm";
 
 export interface SongTableRowPropsType {
     author: AuthorType
