@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import {SongType} from "../../pages/SongPage";
 import {SongUpdateObjectType} from "../../../api/api";
-import {AuthorType} from "../../query/AddSongForm";
+import {AuthorType} from "../../song/AddSongForm";
 import SongTableRow from "./SongTableRow";
 
 export interface SongTablePropsType {
@@ -22,12 +22,12 @@ export interface SongTablePropsType {
 
 const SongTable: React.FC<SongTablePropsType> = (props) => {
     const {songArray, handleDeleteCallback, handleUpdateCallback, authorArray} = props;
-    const [modalEditStatus, setModalEditStatus] = useState(false);
+    /*const [modalEditStatus, setModalEditStatus] = useState(false);
     const [title, setTitle] = useState<string | null>(null)
     const [duration, setDuration] = useState<string | null>(null)
-    const [authorUuid, setAuthorUuid] = useState<string | null>(null)
+    const [authorUuid, setAuthorUuid] = useState<string | null>(null)*/
 
-    const handleEditSong = (songUuid: string) => {
+    /*const handleEditSong = (songUuid: string) => {
         const updatedObject: SongUpdateObjectType = {
             ...(title !== '' && {
                 title
@@ -40,17 +40,17 @@ const SongTable: React.FC<SongTablePropsType> = (props) => {
             }),
         }
         handleUpdateCallback && handleUpdateCallback(songUuid, updatedObject);
-    }
-    const handleTitleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    }*/
+    /*const handleTitleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value)
-    }
-    const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    }*/
+    /*const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDuration(event.target.value)
-    }
+    }*/
 
-    const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    /*const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setAuthorUuid(event.target.value as string);
-    };
+    };*/
 
     return (
         <TableContainer component={Paper}>

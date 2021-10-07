@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {AddSongPage, AuthorType as AuthorResponseType} from "../query/AddSongForm";
+import {AddSongPage, AuthorType as AuthorResponseType} from "../song/AddSongForm";
 import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
-import {QuerySongForm} from "../query/QuerySongForm";
+import {QuerySongForm} from "../song/QuerySongForm";
 import {Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
@@ -108,7 +108,7 @@ export const SongPage: React.FC = () => {
     const [songArray, setSongArray] = useState<Array<SongType>>([]);
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
 
-    async function getAllSongs(queryObject: SongQueryObjectType | undefined) {
+    async function getAllSongs(queryObject?: SongQueryObjectType) {
         try {
             let response = await songsAPI.getAllSong(queryObject);
             /*console.log(response.data);*/
@@ -129,13 +129,11 @@ export const SongPage: React.FC = () => {
 
 
     useEffect(() => {
-        console.log("Use effect",)
-        getAllSongs(undefined);
+        getAllSongs();
         getAllAuthors();
     }, [])
 
     const handleSubmit = (queryObject: SongQueryObjectType) => {
-        console.log("From call back", queryObject);
         getAllSongs(queryObject);
     }
 
@@ -143,7 +141,7 @@ export const SongPage: React.FC = () => {
         songsAPI.deleteSong(uuid)
             .then(res => {
                 console.log("Song has been deleted");
-                getAllSongs(undefined);
+                getAllSongs();
             })
             .catch(err => {
                 console.log('Something went wrong', err);
@@ -153,8 +151,7 @@ export const SongPage: React.FC = () => {
     const handleUpdateSong = (uuid: string, updatedObject: SongUpdateObjectType) => {
         songsAPI.updateSong(uuid, updatedObject)
             .then(res => {
-                console.log("Song has been deleted");
-                getAllSongs(undefined);
+                getAllSongs();
             })
             .catch(err => {
                 console.log('Something went wrong', err);
@@ -164,8 +161,7 @@ export const SongPage: React.FC = () => {
     const handleAddSong = (songObject: AddSongObjectType) => {
         songsAPI.addSong(songObject)
             .then(res => {
-                console.log("Song has been deleted");
-                getAllSongs(undefined);
+                getAllSongs();
             })
             .catch(err => {
                 console.log('Something went wrong', err);

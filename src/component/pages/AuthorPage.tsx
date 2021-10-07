@@ -1,141 +1,189 @@
-import React, {useState} from 'react'
-import {useFormik} from "formik";
-import * as Yup from 'yup';
-import {useHistory} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {AddSongPage, AuthorType as AuthorResponseType} from "../song/AddSongForm";
 import {
-    Button, Card, createStyles, FormControl, FormGroup, Checkbox,
-    Grid, makeStyles, TextField, Theme, Typography, FormControlLabel, Link
-} from "@material-ui/core";
-import {authorsAPI, NewAuthorObjectType} from "../../api/api";
-import {PATH} from "../router/Routes";
-import {Alert} from "@material-ui/lab";
+    AddSongObjectType,
+    authorsAPI, NewAuthorObjectType,
+    QueryAuthorsObjectType,
+    SongQueryObjectType,
+    songsAPI,
+    SongUpdateObjectType, UpdateAuthorObjectType
+} from "../../api/api";
+import {makeStyles} from '@material-ui/core/styles';
+import {QuerySongForm} from "../song/QuerySongForm";
+import {Paper} from "@material-ui/core";
+import Grid from '@material-ui/core/Grid';
+import Typography from "@material-ui/core/Typography";
+import SongTable from '../common/table/SongTable';
+import AuthorTable from "../common/table/AuthorTable";
 
 
-const useStyles = makeStyles<Theme>(theme => createStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
-        textAlign: "center",
-        padding: "30px 30px",
-        width: "413px",
-    },
-    formTitle: {
-        marginBottom: "30px",
-    },
-    formSubtitle: {
+        marginTop: "40px",
         marginBottom: "40px",
+        minWidth: 750,
     },
-    formDescription: {
-        marginBottom: "40px",
+    paper: {
+        margin: 'auto',
+        maxWidth: 1200,
     },
-    formButtonBlock: {
-        marginTop: "15px",
-        /*display: "flex",*/
-        alignItems: "",
+    filterBlock: {
+        backgroundColor: "#ECECF9",
+        maxWidth: "250px",
+        padding: "30px",
+        flexGrow: 1,
     },
-    displayStretch: {
-        display: "flex",
-        alignItems: "stretch"
+    mainBlock: {
+        width: "fit-content",
+        flexGrow: 3,
+        margin: "30px",
+        maxWidth: "950px",
+        boxSizing: "border-box",
     },
-    textFieldArea: {
-        margin: "0px 10px"
+    mainSearchBlock: {
+        marginBottom: "20px",
     },
-}))
+    mainSearchHeader: {
+        marginBottom: "20px",
+    },
 
-const AuthorPage: React.FC = () => {
+}));
 
-    const classes = useStyles()
-    const history = useHistory()
-    const [error, setError] = useState<string | null>(null)
+export interface SongType {
+    uuid: string
+    title: string
+    duration: number
+    createdAt: string
+    updatedAt: string
+    author: AuthorType
+}
 
-    const restoreSchema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        label: Yup.string(),
-    });
+export interface AuthorType {
+    uuid: string
+    name: string
+    label: string
+}
 
+/* Получить все песни определенного исполнителя или нескольких исполнителей.*/
+/* Получить выборку песен или исполнителей по части их названия.*/
+/* Получить выборку песен или исполнителей по дате внесения записи.*/
+/* Получить часть выборки песен или исполнителей. Например,
+    10 песен, идущих после первых 20-и от начала выборки.
+*/
 
-    const showMessage = (message: string, showTime: number) => {
-        setError(message)
-        setTimeout(() => {
-            setError(null)
-        }, showTime)
+export const AuthorPage: React.FC = () => {
+
+    const classes = useStyles();
+    const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
+
+    async function getAllAuthors( queryObject? : QueryAuthorsObjectType) {
+        try {
+            let response = await authorsAPI.getAllAuthor(queryObject)
+            setAuthorArray(response.data)
+        } catch (err) {
+            console.log(err);
+        }
     }
 
 
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            label: '',
-        },
-        validationSchema: restoreSchema,
-        onSubmit: (values) => {
-            const authorObject: NewAuthorObjectType = {
-                name: values.name,
-                label: values.label
-            }
-            authorsAPI.addAuthor(authorObject)
-                .then(res => {
-                    console.log("object added", res.data);
-                    history.push(PATH.SONGS);
-                })
-                .catch(err => {
-                    console.log('Something went wrong ', err.response?.data?.error);
-                    showMessage(err.response?.data?.error, 3000);
-                })
+    useEffect(() => {
+        getAllAuthors();
+    }, [])
 
-            formik.resetForm()
-        },
-    })
+    const handleSearch = (queryObject: QueryAuthorsObjectType) => {
+        getAllAuthors(queryObject);
+    }
 
-    return <Grid
-        container
-        justify="center"
-        alignItems="center"
-        style={{minHeight: '100vh'}}
-    >
-        <Grid item>
-            <Card className={classes.root}>
-                <form onSubmit={formik.handleSubmit}>
-                    <Typography
-                        variant={"h2"}
-                        className={classes.formSubtitle}
-                    >Add author name</Typography>
-                    {
-                        error && (<Alert severity="error">{error}</Alert>)
-                    }
-                    <FormControl className={classes.displayStretch}>
-                        <FormGroup className={classes.textFieldArea}>
-                            <TextField
-                                type="text"
-                                label="Name"
-                                margin="dense"
-                                {...formik.getFieldProps('name')}
+    const handleDeleteAuthor = (uuid: string) => {
+        authorsAPI.deleteAuthor(uuid)
+            .then(res => {
+                console.log("Author has been deleted");
+                getAllAuthors();
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
+    }
+
+    const handleUpdateAuthor = (uuid: string, updatedObject: UpdateAuthorObjectType) => {
+        authorsAPI.updateAuthor(uuid, updatedObject)
+            .then(res => {
+                getAllAuthors();
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
+    }
+
+    const handleAddAuthor = (authorObject: NewAuthorObjectType) => {
+        authorsAPI.addAuthor(authorObject)
+            .then(res => {
+                getAllAuthors();
+            })
+            .catch(err => {
+                console.log('Something went wrong', err);
+            })
+    }
+
+    return (
+        <div className={classes.root}>
+            <Paper
+                elevation={4}
+                className={classes.paper}
+                square={false}
+            >
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="stretch"
+                >
+                    <Grid
+                        item
+                        className={classes.filterBlock}
+                    >
+                        {/*<QuerySongForm
+                            handleSubmitCallBack={handleSearch}
+                        />*/}
+                    </Grid>
+                    <Grid
+                        item
+                        className={classes.mainBlock}
+                    >
+                        <Grid
+                            item
+                            className={classes.mainSearchBlock}
+                            alignItems={"stretch"}
+                        >
+                            <Typography
+                                variant={"h2"}
+                                className={classes.mainSearchHeader}
+                            >
+                                Author Page
+                                <div>
+                                    {/*<AddSongPage
+                                        authorArray={authorArray}
+                                        handleAddSongCallBack={handleAddSong}
+                                    />*/}
+
+                                </div>
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            item
+                            alignItems={"stretch"}
+                        >
+                            <AuthorTable
+                                authorArray={authorArray}
+                                handleDeleteCallback={handleDeleteAuthor}
+                                handleUpdateCallback={handleUpdateAuthor}
                             />
-                            {formik.touched.name && formik.errors.name &&
-                            <div style={{color: 'red'}}>{formik.errors.name}</div>
-                            }
-                            <TextField
-                                type="text"
-                                label="Label"
-                                margin="dense"
-                                {...formik.getFieldProps('label')}
-                            />
-                            {formik.touched.label && formik.errors.label &&
-                            <div style={{color: 'red'}}>{formik.errors.label}</div>
-                            }
-                            <div className={classes.formButtonBlock}>
-
-                                <Button
-                                    type={'submit'}
-                                    variant={'contained'}
-                                    className={classes.formButtonBlock}
-                                    color={'primary'}>
-                                    Add Author
-                                </Button>
-                            </div>
-                        </FormGroup>
-                    </FormControl>
-                </form>
-            </Card>
-        </Grid>
-    </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
+    )
 }
+
 export default AuthorPage

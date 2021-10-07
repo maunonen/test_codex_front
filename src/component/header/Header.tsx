@@ -1,10 +1,8 @@
-import React from 'react'
-import { useHistory, useParams} from 'react-router-dom'
+import React from 'react';
+import { useHistory} from 'react-router-dom';
 import {
     AppBar,
     Button, createStyles,
-    IconButton,
-    LinearProgress,
     makeStyles,
     Theme,
     Toolbar,
@@ -15,7 +13,6 @@ import {PATH} from "../router/Routes";
 const useStyles = makeStyles<Theme>(theme => createStyles({
     root: {
         backgroundColor: "#EBE0E9",
-
     },
     toolbar :  {
        display : "flex",

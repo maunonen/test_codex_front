@@ -5,8 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import {
     Button,
     Checkbox,
-    FormControl, Input,
-    NativeSelect,
+    FormControl, Input, InputLabel,
+    NativeSelect, Select,
 } from "@material-ui/core";
 import {AddSongObjectType} from "../../api/api";
 
@@ -129,11 +129,13 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
                         />
                         <FormControl>
                             <NativeSelect
+                                aria-label={"Author"}
                                 placeholder={"Author"}
                                 value={authorUuid}
                                 onChange={handleAuthorChange}
                                 input={<Input/>}
                             >
+                                <option value={""}>{"--Choose Author"}</option>
                                 {
                                     authorArray && authorArray.map(author => {
                                         return <option value={author.uuid}>{author.name}</option>

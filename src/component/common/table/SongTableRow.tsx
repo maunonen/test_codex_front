@@ -4,7 +4,7 @@ import moment from "moment";
 import ModalForm from "../modal/ModalForm";
 import {SongType} from "../../pages/SongPage";
 import {SongUpdateObjectType} from "../../../api/api";
-import {AuthorType} from "../../query/AddSongForm";
+import {AuthorType} from "../../song/AddSongForm";
 
 export interface SongTableRowPropsType {
     song: SongType

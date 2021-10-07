@@ -40,6 +40,12 @@ export interface NewAuthorObjectType {
     label: string
     /*birthday: string*/
 }
+export interface UpdateAuthorObjectType {
+    name?: string
+    label?: string
+    /*birthday: string*/
+}
+
 
 export interface QueryAuthorsObjectType {
     params?: {
@@ -62,7 +68,7 @@ export const songsAPI = {
     updateSong(uuid: string, updateObject: SongUpdateObjectType) {
         return instance.put<any>(`/api/songs/${uuid}`, updateObject);
     },
-    getAllSong(queryObject: SongQueryObjectType | undefined) {
+    getAllSong(queryObject?: SongQueryObjectType) {
         return instance.get<any>("/api/songs", queryObject);
     },
     getSongByID(uuid: string) {
@@ -77,7 +83,7 @@ export const authorsAPI = {
     deleteAuthor(uuid: string) {
         return instance.delete<any>(`/api/authors/${uuid}`);
     },
-    updateAuthor(uuid: string, updateAuthorObject: NewAuthorObjectType) {
+    updateAuthor(uuid: string, updateAuthorObject: UpdateAuthorObjectType) {
         return instance.put<any>(`/api/authors/${uuid}`, updateAuthorObject);
     },
     getAllAuthor(queryObject?: QueryAuthorsObjectType) {

@@ -53,19 +53,6 @@ const MenuProps = {
     },
 };
 
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
-
 function getStyles(name: string, personName: string[], theme: Theme) {
     return {
         fontWeight:
@@ -127,10 +114,9 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
         setCheckedAuthorList(event.target.value as string[]);
 
     };
-    console.log(checkedAuthorList);
 
     const handleSubmit = () => {
-        const querySongObject = {
+        const querySongObject : SongQueryObjectType = {
             params: {
                 ...(songTitle !== '' && {
                     songTitle
@@ -152,7 +138,7 @@ export const QuerySongForm: React.FC<QuerySongFormPropsType> = (props) => {
                 }),
             }
         }
-        handleSubmitCallBack(querySongObject)
+        handleSubmitCallBack && handleSubmitCallBack(querySongObject)
         console.log(querySongObject);
     }
 
