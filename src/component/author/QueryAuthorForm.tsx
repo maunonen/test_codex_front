@@ -63,11 +63,14 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 }
 
 export interface QueryAuthorFormPropsType {
+    authorArray: Array<AuthorType>
     handleSubmitCallBack: (songQueryObject: QueryAuthorsObjectType) => void
 }
 
 export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
-    const {handleSubmitCallBack} = props
+
+    const {handleSubmitCallBack, authorArray} = props
+
     const classes = useStyles();
 
     const [createdAt, setCreatedAt] = React.useState<string>('');
@@ -75,19 +78,6 @@ export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
     const [offset, setOffset] = useState<string>('');
     const [limit, setLimit] = useState<string>('');
     const [checkedAuthorList, setCheckedAuthorList] = useState<Array<string>>([]);
-    const [checkboxAuthorList, setCheckboxAuthorList] = useState<Array<AuthorType>>([]);
-
-    useEffect(() => {
-        authorsAPI.getAllAuthor(undefined)
-            .then(res => {
-                console.log(res.data);
-                setCheckboxAuthorList(res.data);
-
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [])
 
     const handleAuthorNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorName(event.target.value)
@@ -110,7 +100,7 @@ export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
     };
 
     const handleSubmit = () => {
-        const querySongObject : QueryAuthorsObjectType = {
+        const querySongObject: QueryAuthorsObjectType = {
             params: {
                 ...(authorName !== '' && {
                     authorName
@@ -204,7 +194,7 @@ export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
                             input={<Input/>}
                             MenuProps={MenuProps}
                         >
-                            {checkboxAuthorList.map((author) => (
+                            {authorArray.map((author) => (
                                 <MenuItem
                                     key={author.uuid}
                                     value={author.uuid}

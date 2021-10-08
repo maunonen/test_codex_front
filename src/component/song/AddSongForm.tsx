@@ -87,7 +87,7 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
                 duration: Number(duration)
             }),
         }
-        handleAddSongCallBack && handleAddSongCallBack(addSongObject)
+        handleAddSongCallBack && handleAddSongCallBack(addSongObject);
         console.log(addSongObject);
     }
 

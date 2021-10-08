@@ -7,6 +7,8 @@ import {Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import SongTable from '../song/SongTable';
+import {ErrorMessageObjectType, showMessage} from "../utils/helper";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -107,13 +109,14 @@ export const SongPage: React.FC = () => {
     const classes = useStyles();
     const [songArray, setSongArray] = useState<Array<SongType>>([]);
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
+    const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined)
 
     async function getAllSongs(queryObject?: SongQueryObjectType) {
         try {
             let response = await songsAPI.getAllSong(queryObject);
-            /*console.log(response.data);*/
             setSongArray(response.data);
         } catch (err) {
+            showMessage("Nothing found", 3000, "error", setError );
             console.log('Something went wrong', err);
         }
     }
@@ -123,6 +126,7 @@ export const SongPage: React.FC = () => {
             let response = await authorsAPI.getAllAuthor()
             setAuthorArray(response.data)
         } catch (err) {
+            showMessage("Something went wrong", 3000, "error", setError );
             console.log(err);
         }
     }
@@ -141,9 +145,11 @@ export const SongPage: React.FC = () => {
         songsAPI.deleteSong(uuid)
             .then(res => {
                 console.log("Song has been deleted");
+                showMessage("Song deleted successfully", 3000, "success", setError );
                 getAllSongs();
             })
             .catch(err => {
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
     }
@@ -151,9 +157,11 @@ export const SongPage: React.FC = () => {
     const handleUpdateSong = (uuid: string, updatedObject: SongUpdateObjectType) => {
         songsAPI.updateSong(uuid, updatedObject)
             .then(res => {
+                showMessage("Song updated successfully", 3000, "success", setError );
                 getAllSongs();
             })
             .catch(err => {
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
     }
@@ -161,9 +169,11 @@ export const SongPage: React.FC = () => {
     const handleAddSong = (songObject: AddSongObjectType) => {
         songsAPI.addSong(songObject)
             .then(res => {
+                showMessage("Song added successfully", 3000, "success", setError );
                 getAllSongs();
             })
             .catch(err => {
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
     }
@@ -204,6 +214,9 @@ export const SongPage: React.FC = () => {
                             >
                                 List of song
                                 <div>
+                                    {
+                                        error && (<Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
+                                    }
                                     <AddSongPage
                                         authorArray={authorArray}
                                         handleAddSongCallBack={handleAddSong}

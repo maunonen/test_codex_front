@@ -13,6 +13,7 @@ import AuthorTable from "../author/AuthorTable";
 import {QueryAuthorForm} from "../author/QueryAuthorForm";
 import AddAuthorForm from "../author/AddAuthorForm";
 import {Alert} from "@material-ui/lab";
+import {ErrorMessageObjectType, showMessage} from "../utils/helper";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,25 +70,18 @@ export interface AuthorType {
     10 песен, идущих после первых 20-и от начала выборки.
 */
 
-export type ColorType = "error" | "warning" | "info" | "success"
-export type ErrorMessageObjectType = {
-    message : string
-    messageType : ColorType | undefined
-}
-
 export const AuthorPage: React.FC = () => {
 
     const classes = useStyles();
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
     const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined)
-    const [errorType, setErrorType] = useState<ColorType | undefined>(undefined)
 
     async function getAllAuthors(queryObject?: QueryAuthorsObjectType) {
         try {
             let response = await authorsAPI.getAllAuthor(queryObject)
             setAuthorArray(response.data)
         } catch (err) {
-            showMessage("Nothing found", 3000, "error" );
+            showMessage("Nothing found", 3000, "error", setError );
             console.log(err);
         }
     }
@@ -104,11 +98,11 @@ export const AuthorPage: React.FC = () => {
     const handleDeleteAuthor = (uuid: string) => {
         authorsAPI.deleteAuthor(uuid)
             .then(res => {
-                showMessage("Author deleted", 3000, "success" );
+                showMessage("Author deleted", 3000, "success", setError );
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage("Something went wrong", 3000, "error" );
+                showMessage("Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
     }
@@ -116,11 +110,11 @@ export const AuthorPage: React.FC = () => {
     const handleUpdateAuthor = (uuid: string, updatedObject: UpdateAuthorObjectType) => {
         authorsAPI.updateAuthor(uuid, updatedObject)
             .then(res => {
-                showMessage("Author updated", 3000, "success" );
+                showMessage("Author updated", 3000, "success", setError );
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage("Something went wrong", 3000, "error" );
+                showMessage("Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
     }
@@ -128,23 +122,13 @@ export const AuthorPage: React.FC = () => {
     const handleAddAuthor = (authorObject: NewAuthorObjectType) => {
         authorsAPI.addAuthor(authorObject)
             .then(res => {
-                showMessage("Author added", 3000, "success" );
+                showMessage("Author added", 3000, "success", setError );
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error" );
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
                 console.log('Something went wrong', err);
             })
-    }
-
-    const showMessage = (message: string, showTime: number, messageType: ColorType) => {
-        let messageObject : ErrorMessageObjectType = {
-            message , messageType
-        };
-        setError(messageObject);
-        setTimeout(() => {
-            setError(undefined);
-        }, showTime)
     }
 
     return (
@@ -165,6 +149,7 @@ export const AuthorPage: React.FC = () => {
                         className={classes.filterBlock}
                     >
                         <QueryAuthorForm
+                            authorArray={authorArray}
                             handleSubmitCallBack={handleSearch}
                         />
                     </Grid>

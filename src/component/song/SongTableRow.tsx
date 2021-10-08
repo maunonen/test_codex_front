@@ -6,6 +6,7 @@ import {SongType} from "../pages/SongPage";
 import {SongUpdateObjectType} from "../../api/api";
 import {AuthorType} from "./AddSongForm";
 
+
 export interface SongTableRowPropsType {
     song: SongType
     authorArray: Array<AuthorType>
@@ -13,7 +14,9 @@ export interface SongTableRowPropsType {
     handleUpdateCallback: (uuid: string, updatedObject: SongUpdateObjectType) => void
 }
 
+
 export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
+
     const {song, handleDeleteCallback, handleUpdateCallback, authorArray} = props;
 
     const [modalEditStatus, setModalEditStatus] = useState(false);
@@ -40,10 +43,12 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
     const handleTitleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value)
     }
+
     const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/\D+/.test(event.target.value)) return;
         setDuration(Number(+event.target.value));
     }
+
     const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setAuthorUuid(event.target.value as string);
     };

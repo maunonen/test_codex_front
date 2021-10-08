@@ -19,6 +19,7 @@ export interface SongTablePropsType {
 }
 
 const AuthorTable: React.FC<SongTablePropsType> = (props) => {
+
     const {handleDeleteCallback, handleUpdateCallback, authorArray} = props;
 
     return (
@@ -35,6 +36,7 @@ const AuthorTable: React.FC<SongTablePropsType> = (props) => {
                 <TableBody>
                     {authorArray.map((author) => (
                         <AuthorTableRow
+                            key={author.uuid}
                             author={author}
                             handleDeleteCallback={handleDeleteCallback}
                             handleUpdateCallback={handleUpdateCallback}

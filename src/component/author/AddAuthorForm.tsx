@@ -1,14 +1,11 @@
 import React, {useState} from 'react'
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-import {useHistory} from "react-router-dom";
 import {
     Button, Card, createStyles, FormControl, FormGroup,
     Grid, makeStyles, TextField, Theme, Typography,
 } from "@material-ui/core";
-import {authorsAPI, NewAuthorObjectType} from "../../api/api";
-import {PATH} from "../router/Routes";
-import {Alert} from "@material-ui/lab";
+import { NewAuthorObjectType} from "../../api/api";
 
 
 const useStyles = makeStyles<Theme>(theme => createStyles({

@@ -1,7 +1,6 @@
 import React from 'react'
 import {Redirect, Switch, Route} from 'react-router-dom'
 import {SongPage} from "../pages/SongPage";
-/*import {AuthorPage} from "../pages/AuthorPage";*/
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthorPage from "../pages/AuthorPage";
 
@@ -20,7 +19,7 @@ const Routes: React.FC = () => {
                 <Route path={PATH.SONGS} render={() => <SongPage/>}/>
                 <Route path={PATH.AUTHORS} render={() => <AuthorPage/>}/>
                 <Route path={PATH.NOTFOUND} render={() => <NotFoundPage/>}/>
-                <Route path={'/'} exact render={() => <SongPage/>}/>
+                <Route path={'/'} exact render={() => <AuthorPage/>}/>
                 {/*<Route path={PATH.SONGS + '/:id'} exact={true} component={DestinationProfileContainer} />*/}
                 <Redirect from={PATH.ALL_ROUTES} to={PATH.NOTFOUND}/>
             </Switch>

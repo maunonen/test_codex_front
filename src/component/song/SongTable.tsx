@@ -13,6 +13,7 @@ import {SongUpdateObjectType} from "../../api/api";
 import {AuthorType} from "./AddSongForm";
 import SongTableRow from "./SongTableRow";
 
+
 export interface SongTablePropsType {
     songArray: Array<SongType>
     authorArray : Array<AuthorType>
@@ -20,37 +21,10 @@ export interface SongTablePropsType {
     handleUpdateCallback: (uuid: string, updatedObject: SongUpdateObjectType) => void
 }
 
+
 const SongTable: React.FC<SongTablePropsType> = (props) => {
+
     const {songArray, handleDeleteCallback, handleUpdateCallback, authorArray} = props;
-    /*const [modalEditStatus, setModalEditStatus] = useState(false);
-    const [title, setTitle] = useState<string | null>(null)
-    const [duration, setDuration] = useState<string | null>(null)
-    const [authorUuid, setAuthorUuid] = useState<string | null>(null)*/
-
-    /*const handleEditSong = (songUuid: string) => {
-        const updatedObject: SongUpdateObjectType = {
-            ...(title !== '' && {
-                title
-            }),
-            ...((duration !== '' && duration && isFinite(+duration)) && {
-                duration: Number(duration)
-            }),
-            ...(authorUuid !== '' && {
-                authorUuid
-            }),
-        }
-        handleUpdateCallback && handleUpdateCallback(songUuid, updatedObject);
-    }*/
-    /*const handleTitleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.target.value)
-    }*/
-    /*const handleDurationUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDuration(event.target.value)
-    }*/
-
-    /*const handleAuthorCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setAuthorUuid(event.target.value as string);
-    };*/
 
     return (
         <TableContainer component={Paper}>
@@ -79,4 +53,6 @@ const SongTable: React.FC<SongTablePropsType> = (props) => {
         </TableContainer>
     );
 }
+
+
 export default SongTable;
