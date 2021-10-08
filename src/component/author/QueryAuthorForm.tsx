@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import {Button, Checkbox, FormControl, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {Button, FormControl, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
 import {muiTheme} from "../common/theme/theme";
-import {authorsAPI, QueryAuthorsObjectType, SongQueryObjectType} from "../../api/api";
+import { QueryAuthorsObjectType} from "../../api/api";
 import {AuthorType} from "../pages/AuthorPage";
 
 
@@ -120,7 +120,6 @@ export const QueryAuthorForm: React.FC<QueryAuthorFormPropsType> = (props) => {
             }
         }
         handleSubmitCallBack && handleSubmitCallBack(querySongObject);
-        console.log(querySongObject);
     }
 
     return (

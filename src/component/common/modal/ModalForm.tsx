@@ -34,7 +34,7 @@ const ModalForm: React.FC<ModalPropsType> = (props) => {
     const {
         openStatus, handleCloseModal,
         modalActionCallback, modalTitle, modalText,
-        actionButtonTitle, closeAfterAction = true, children,
+        actionButtonTitle, children,
     } = props
 
     const handleClose = () => {

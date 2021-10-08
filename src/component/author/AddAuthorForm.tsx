@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {useFormik} from "formik";
 import * as Yup from 'yup';
 import {
-    Button, Card, createStyles, FormControl, FormGroup,
-    Grid, makeStyles, TextField, Theme, Typography,
+    Button, createStyles, FormControl, FormGroup,
+    Grid, makeStyles, TextField, Theme,
 } from "@material-ui/core";
 import { NewAuthorObjectType} from "../../api/api";
 

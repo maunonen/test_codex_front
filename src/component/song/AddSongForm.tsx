@@ -1,12 +1,11 @@
-import React, {ChangeEventHandler, Dispatch, KeyboardEventHandler, SetStateAction, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
 import {
     Button,
-    Checkbox,
-    FormControl, Input, InputLabel,
-    NativeSelect, Select,
+    FormControl, Input,
+    NativeSelect,
 } from "@material-ui/core";
 import {AddSongObjectType} from "../../api/api";
 
@@ -88,7 +87,6 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
             }),
         }
         handleAddSongCallBack && handleAddSongCallBack(addSongObject);
-        console.log(addSongObject);
     }
 
     return (

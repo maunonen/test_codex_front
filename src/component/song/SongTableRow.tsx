@@ -36,7 +36,6 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
                 authorUuid
             }),
         }
-        console.log(updatedObject);
         handleUpdateCallback && handleUpdateCallback(songUuid, updatedObject);
     }
 

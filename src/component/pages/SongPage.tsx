@@ -58,45 +58,6 @@ export interface AuthorType {
     label: string
 }
 
-const songArray: Array<SongType> = [
-    {
-        uuid: "12760b38-b681-45dc-9c5c-0eca12994d16",
-        title: "15",
-        duration: 450,
-        createdAt: "2021-10-06T14:23:08.313Z",
-        updatedAt: "2021-10-06T14:23:08.313Z",
-        author: {
-            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
-            name: "Radiohead 3",
-            label: "some label 2"
-        }
-    },
-    {
-        uuid: "66f3230b-9393-4cac-99fd-858a40d9fefe",
-        title: "60",
-        duration: 450,
-        createdAt: "2021-10-06T14:23:13.154Z",
-        updatedAt: "2021-10-06T14:23:13.154Z",
-        author: {
-            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
-            name: "Radiohead 3",
-            label: "some label 2"
-        }
-    },
-    {
-        uuid: "076881ab-8fec-4ddb-a58c-05110228c2a8",
-        title: "nude",
-        duration: 450,
-        createdAt: "2021-10-06T14:23:17.091Z",
-        updatedAt: "2021-10-06T14:23:17.091Z",
-        author: {
-            uuid: "72dd26ca-9131-44b5-beac-614adbb6e4d2",
-            name: "Radiohead 3",
-            label: "some label 2"
-        }
-    }
-]
-
 /* Получить все песни определенного исполнителя или нескольких исполнителей.*/
 /* Получить выборку песен или исполнителей по части их названия.*/
 /* Получить выборку песен или исполнителей по дате внесения записи.*/
@@ -144,7 +105,6 @@ export const SongPage: React.FC = () => {
     const handleDeleteSong = (uuid: string) => {
         songsAPI.deleteSong(uuid)
             .then(res => {
-                console.log("Song has been deleted");
                 showMessage("Song deleted successfully", 3000, "success", setError );
                 getAllSongs();
             })
