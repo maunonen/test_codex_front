@@ -6,7 +6,7 @@ import {
     UpdateAuthorObjectType
 } from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
-import {Paper} from "@material-ui/core";
+import {Button, Paper, TextField} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import AuthorTable from "../author/AuthorTable";
@@ -14,6 +14,7 @@ import {QueryAuthorForm} from "../author/QueryAuthorForm";
 import AddAuthorForm from "../author/AddAuthorForm";
 import {Alert} from "@material-ui/lab";
 import {ErrorMessageObjectType, showMessage} from "../utils/helper";
+import ModalForm from "../common/modal/ModalForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
     mainSearchHeader: {
         marginBottom: "20px",
     },
-
+    formButtonBlock: {
+        marginTop: "15px",
+    },
 }));
 
 export interface SongType {
@@ -70,18 +73,20 @@ export interface AuthorType {
     10 песен, идущих после первых 20-и от начала выборки.
 */
 
-export const AuthorPage: React.FC = () => {
+const AuthorPage: React.FC = () => {
 
     const classes = useStyles();
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
     const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined)
+
+    const [modalEditStatus, setModalEditStatus] = useState(false);
 
     async function getAllAuthors(queryObject?: QueryAuthorsObjectType) {
         try {
             let response = await authorsAPI.getAllAuthor(queryObject)
             setAuthorArray(response.data)
         } catch (err) {
-            showMessage("Nothing found", 3000, "error", setError );
+            showMessage("Nothing found", 3000, "error", setError);
             console.log(err);
         }
     }
@@ -98,11 +103,11 @@ export const AuthorPage: React.FC = () => {
     const handleDeleteAuthor = (uuid: string) => {
         authorsAPI.deleteAuthor(uuid)
             .then(res => {
-                showMessage("Author deleted", 3000, "success", setError );
+                showMessage("Author deleted", 3000, "success", setError);
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage("Something went wrong", 3000, "error", setError );
+                showMessage("Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -110,11 +115,11 @@ export const AuthorPage: React.FC = () => {
     const handleUpdateAuthor = (uuid: string, updatedObject: UpdateAuthorObjectType) => {
         authorsAPI.updateAuthor(uuid, updatedObject)
             .then(res => {
-                showMessage("Author updated", 3000, "success", setError );
+                showMessage("Author updated", 3000, "success", setError);
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage("Something went wrong", 3000, "error", setError );
+                showMessage("Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -122,11 +127,11 @@ export const AuthorPage: React.FC = () => {
     const handleAddAuthor = (authorObject: NewAuthorObjectType) => {
         authorsAPI.addAuthor(authorObject)
             .then(res => {
-                showMessage("Author added", 3000, "success", setError );
+                showMessage("Author added", 3000, "success", setError);
                 getAllAuthors();
             })
             .catch(err => {
-                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -170,11 +175,39 @@ export const AuthorPage: React.FC = () => {
                             </Typography>
                             <div>
                                 {
-                                    error && (<Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
+                                    error && (
+                                        <Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
                                 }
-                                <AddAuthorForm
-                                    handleAddAuthor={handleAddAuthor}
-                                />
+                                <Button
+                                    variant={'contained'}
+                                    className={classes.formButtonBlock}
+                                    color={'primary'}
+                                    onClick={() => {
+                                        setModalEditStatus(true)
+                                    }}
+                                >
+                                    Add Author
+                                </Button>
+                                <ModalForm
+                                    modalTitle={"Add author"}
+                                    actionButtonTitle={"Add"}
+                                    openStatus={modalEditStatus}
+                                    handleCloseModal={setModalEditStatus}
+                                    removeActionBlock={true}
+                                    modalActionCallback={() => {
+                                        /*handleAddAuthor();*/
+                                        /*handleEditAuthor(author.uuid)*/
+                                    }}
+                                >
+                                    <>
+                                        <AddAuthorForm
+                                            handleCloseModal={setModalEditStatus}
+                                            handleAddAuthor={handleAddAuthor}
+
+                                        >
+                                        </AddAuthorForm>
+                                    </>
+                                </ModalForm>
                             </div>
                         </Grid>
                         <Grid

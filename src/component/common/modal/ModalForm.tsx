@@ -13,10 +13,11 @@ export interface ModalPropsType {
     modalText?: string
     openStatus: boolean
     handleCloseModal: (openStatus: boolean) => void
-    modalActionCallback: () => void
+    modalActionCallback?: () => void
     actionButtonTitle: string
     children?: JSX.Element
     closeAfterAction?: boolean
+    removeActionBlock?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +35,7 @@ const ModalForm: React.FC<ModalPropsType> = (props) => {
     const {
         openStatus, handleCloseModal,
         modalActionCallback, modalTitle, modalText,
-        actionButtonTitle, children,
+        actionButtonTitle, children, removeActionBlock
     } = props
 
     const handleClose = () => {
@@ -61,14 +62,16 @@ const ModalForm: React.FC<ModalPropsType> = (props) => {
                             {children}
                         </DialogContentText>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleAction} color="primary" autoFocus>
-                            {actionButtonTitle}
-                        </Button>
-                    </DialogActions>
+                    {
+                        !removeActionBlock && (<DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={handleAction} color="primary" autoFocus>
+                                {actionButtonTitle}
+                            </Button>
+                        </DialogActions>)
+                    }
                 </div>
             </Dialog>
         </div>

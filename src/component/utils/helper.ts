@@ -9,7 +9,7 @@ export const showMessage = (message: string, showTime: number, messageType: Colo
     let messageObject : ErrorMessageObjectType = {
         message , messageType
     };
-    setError(messageObject);
+    setError && setError(messageObject);
     setTimeout(() => {
         setError(undefined);
     }, showTime)

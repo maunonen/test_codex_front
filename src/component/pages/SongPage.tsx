@@ -3,12 +3,15 @@ import {AddSongPage, AuthorType as AuthorResponseType} from "../song/AddSongForm
 import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
 import {QuerySongForm} from "../song/QuerySongForm";
-import {Paper} from "@material-ui/core";
+import {Button, Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import SongTable from '../song/SongTable';
 import {ErrorMessageObjectType, showMessage} from "../utils/helper";
 import {Alert} from "@material-ui/lab";
+import AddAuthorForm from "../author/AddAuthorForm";
+import ModalForm from "../common/modal/ModalForm";
+import AddSongFormik from "../song/AddSongFormik";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
     mainSearchHeader: {
         marginBottom: "20px",
     },
-
+    formButtonBlock: {
+        marginTop: "15px",
+    },
 }));
 
 export interface SongType {
@@ -70,7 +75,9 @@ export const SongPage: React.FC = () => {
     const classes = useStyles();
     const [songArray, setSongArray] = useState<Array<SongType>>([]);
     const [authorArray, setAuthorArray] = useState<Array<AuthorResponseType>>([]);
-    const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined)
+    const [error, setError] = useState<ErrorMessageObjectType | undefined>(undefined);
+
+    const [modalEditStatus, setModalEditStatus] = useState(false);
 
     async function getAllSongs(queryObject?: SongQueryObjectType) {
         try {
@@ -177,11 +184,30 @@ export const SongPage: React.FC = () => {
                                     {
                                         error && (<Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
                                     }
-                                    <AddSongPage
-                                        authorArray={authorArray}
-                                        handleAddSongCallBack={handleAddSong}
-                                    />
+                                    <Button
+                                        variant={'contained'}
+                                        className={classes.formButtonBlock}
+                                        color={'primary'}
+                                        onClick={() => {
+                                            setModalEditStatus(true)
+                                        }}
+                                    >
+                                        Add Song
+                                    </Button>
+                                    <ModalForm
+                                        modalTitle={"Add song"}
+                                        actionButtonTitle={"Add"}
+                                        openStatus={modalEditStatus}
+                                        handleCloseModal={setModalEditStatus}
+                                        removeActionBlock={true}
+                                    >
+                                          <AddSongFormik
+                                              handleCloseModal={setModalEditStatus}
+                                              handleAddSong={handleAddSong}
+                                              authorArray={authorArray}
+                                          />
 
+                                    </ModalForm>
                                 </div>
                             </Typography>
                         </Grid>

@@ -67,7 +67,9 @@ export const AddSongPage: React.FC<AddSongFormPropsType> = (props) => {
 
     const [songTitle, setSongTitle] = useState<string>('');
     const [duration, setDuration] = useState<string>('');
-    const [authorUuid, setAuthorUuid] = useState<string>("b84ccaa0-d897-48e7-9c2b-95bc4905a4ab");
+    const [authorUuid, setAuthorUuid] = useState<string>("");
+
+
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSongTitle(event.target.value)

@@ -41,10 +41,11 @@ const useStyles = makeStyles<Theme>(theme => createStyles({
 
 export interface AddAuthorFormPropsType {
     handleAddAuthor: (authorObject: NewAuthorObjectType) => void
+    handleCloseModal?: (openStatus: boolean) => void
 }
 
 const AddAuthorForm: React.FC<AddAuthorFormPropsType> = (props) => {
-    const {handleAddAuthor} = props;
+    const {handleAddAuthor, handleCloseModal} = props;
     const classes = useStyles()
 
     const restoreSchema = Yup.object().shape({
@@ -63,13 +64,13 @@ const AddAuthorForm: React.FC<AddAuthorFormPropsType> = (props) => {
                 name: values.name,
                 label: values.label
             }
+            handleCloseModal && handleCloseModal(false);
             handleAddAuthor && handleAddAuthor(authorObject);
             formik.resetForm();
         },
     })
 
     return (
-
         <Grid>
             <form onSubmit={formik.handleSubmit}>
                 <FormControl className={classes.displayStretch}>
