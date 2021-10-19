@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AddSongPage, AuthorType as AuthorResponseType} from "../song/AddSongForm";
+import { AuthorType as AuthorResponseType} from "../song/AddSongForm";
 import {AddSongObjectType, authorsAPI, SongQueryObjectType, songsAPI, SongUpdateObjectType} from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
 import {QuerySongForm} from "../song/QuerySongForm";
@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import SongTable from '../song/SongTable';
 import {ErrorMessageObjectType, showMessage} from "../utils/helper";
 import {Alert} from "@material-ui/lab";
-import AddAuthorForm from "../author/AddAuthorForm";
 import ModalForm from "../common/modal/ModalForm";
 import AddSongFormik from "../song/AddSongFormik";
 
@@ -84,7 +83,7 @@ export const SongPage: React.FC = () => {
             let response = await songsAPI.getAllSong(queryObject);
             setSongArray(response.data);
         } catch (err) {
-            showMessage("Nothing found", 3000, "error", setError );
+            showMessage("Nothing found", 3000, "error", setError);
             console.log('Something went wrong', err);
         }
     }
@@ -94,7 +93,7 @@ export const SongPage: React.FC = () => {
             let response = await authorsAPI.getAllAuthor()
             setAuthorArray(response.data)
         } catch (err) {
-            showMessage("Something went wrong", 3000, "error", setError );
+            showMessage("Something went wrong", 3000, "error", setError);
             console.log(err);
         }
     }
@@ -112,11 +111,11 @@ export const SongPage: React.FC = () => {
     const handleDeleteSong = (uuid: string) => {
         songsAPI.deleteSong(uuid)
             .then(res => {
-                showMessage("Song deleted successfully", 3000, "success", setError );
+                showMessage("Song deleted successfully", 3000, "success", setError);
                 getAllSongs();
             })
             .catch(err => {
-                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -124,11 +123,11 @@ export const SongPage: React.FC = () => {
     const handleUpdateSong = (uuid: string, updatedObject: SongUpdateObjectType) => {
         songsAPI.updateSong(uuid, updatedObject)
             .then(res => {
-                showMessage("Song updated successfully", 3000, "success", setError );
+                showMessage("Song updated successfully", 3000, "success", setError);
                 getAllSongs();
             })
             .catch(err => {
-                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -136,11 +135,11 @@ export const SongPage: React.FC = () => {
     const handleAddSong = (songObject: AddSongObjectType) => {
         songsAPI.addSong(songObject)
             .then(res => {
-                showMessage("Song added successfully", 3000, "success", setError );
+                showMessage("Song added successfully", 3000, "success", setError);
                 getAllSongs();
             })
             .catch(err => {
-                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError );
+                showMessage(err.response?.data?.error || "Something went wrong", 3000, "error", setError);
                 console.log('Something went wrong', err);
             })
     }
@@ -173,47 +172,49 @@ export const SongPage: React.FC = () => {
                         <Grid
                             item
                             className={classes.mainSearchBlock}
-                            alignItems={"stretch"}
+                            /*alignItems={"stretch"}*/
                         >
                             <Typography
                                 variant={"h2"}
                                 className={classes.mainSearchHeader}
                             >
                                 List of song
-                                <div>
-                                    {
-                                        error && (<Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
-                                    }
-                                    <Button
-                                        variant={'contained'}
-                                        className={classes.formButtonBlock}
-                                        color={'primary'}
-                                        onClick={() => {
-                                            setModalEditStatus(true)
-                                        }}
-                                    >
-                                        Add Song
-                                    </Button>
-                                    <ModalForm
-                                        modalTitle={"Add song"}
-                                        actionButtonTitle={"Add"}
-                                        openStatus={modalEditStatus}
-                                        handleCloseModal={setModalEditStatus}
-                                        removeActionBlock={true}
-                                    >
-                                          <AddSongFormik
-                                              handleCloseModal={setModalEditStatus}
-                                              handleAddSong={handleAddSong}
-                                              authorArray={authorArray}
-                                          />
-
-                                    </ModalForm>
-                                </div>
                             </Typography>
+                            <div>
+                                {
+                                    error && (
+                                        <Alert severity={error?.messageType || "warning"}>{error?.message}</Alert>)
+                                }
+                                <Button
+                                    variant={'contained'}
+                                    className={classes.formButtonBlock}
+                                    color={'primary'}
+                                    onClick={() => {
+                                        setModalEditStatus(true)
+                                    }}
+                                >
+                                    Add Song
+                                </Button>
+                                <ModalForm
+                                    modalTitle={"Add song"}
+                                    actionButtonTitle={"Add"}
+                                    openStatus={modalEditStatus}
+                                    handleCloseModal={setModalEditStatus}
+                                    removeActionBlock={true}
+                                >
+                                    <AddSongFormik
+                                        handleCloseModal={setModalEditStatus}
+                                        handleAddSong={handleAddSong}
+                                        authorArray={authorArray}
+                                    />
+
+                                </ModalForm>
+                            </div>
+
                         </Grid>
                         <Grid
                             item
-                            alignItems={"stretch"}
+                            /*alignItems={"stretch"}*/
                         >
                             <SongTable
                                 songArray={songArray}

@@ -117,7 +117,7 @@ export const SongTableRow: React.FC<SongTableRowPropsType> = (props) => {
                             >
                                 {
                                     authorArray && authorArray.map(author => {
-                                        return <option value={author.uuid}>{author.name}</option>
+                                        return <option key={author.uuid} value={author.uuid}>{author.name}</option>
                                     })
                                 }
                             </NativeSelect>

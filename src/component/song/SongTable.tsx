@@ -16,7 +16,7 @@ import SongTableRow from "./SongTableRow";
 
 export interface SongTablePropsType {
     songArray: Array<SongType>
-    authorArray : Array<AuthorType>
+    authorArray: Array<AuthorType>
     handleDeleteCallback: (uuid: string) => void
     handleUpdateCallback: (uuid: string, updatedObject: SongUpdateObjectType) => void
 }
@@ -39,7 +39,7 @@ const SongTable: React.FC<SongTablePropsType> = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {songArray.map((song) => (
+                    {songArray && songArray.map((song) => (
                         <SongTableRow
                             key={song.uuid}
                             song={song}

@@ -6,7 +6,7 @@ import {
     UpdateAuthorObjectType
 } from "../../api/api";
 import {makeStyles} from '@material-ui/core/styles';
-import {Button, Paper, TextField} from "@material-ui/core";
+import {Button, Paper} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import AuthorTable from "../author/AuthorTable";
@@ -165,7 +165,7 @@ const AuthorPage: React.FC = () => {
                         <Grid
                             item
                             className={classes.mainSearchBlock}
-                            alignItems={"stretch"}
+                            /*alignItems={"stretch"}*/
                         >
                             <Typography
                                 variant={"h2"}
@@ -199,20 +199,17 @@ const AuthorPage: React.FC = () => {
                                         /*handleEditAuthor(author.uuid)*/
                                     }}
                                 >
-                                    <>
-                                        <AddAuthorForm
-                                            handleCloseModal={setModalEditStatus}
-                                            handleAddAuthor={handleAddAuthor}
-
-                                        >
-                                        </AddAuthorForm>
-                                    </>
+                                    <AddAuthorForm
+                                        handleCloseModal={setModalEditStatus}
+                                        handleAddAuthor={handleAddAuthor}
+                                    />
+                                    {/*</AddAuthorForm>*/}
                                 </ModalForm>
                             </div>
                         </Grid>
                         <Grid
                             item
-                            alignItems={"stretch"}
+                            /*alignItems={"stretch"}*/
                         >
                             <AuthorTable
                                 authorArray={authorArray}

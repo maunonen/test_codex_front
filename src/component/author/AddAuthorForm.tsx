@@ -76,7 +76,6 @@ const AddAuthorForm: React.FC<AddAuthorFormPropsType> = (props) => {
                 <FormControl className={classes.displayStretch}>
                     <FormGroup className={classes.textFieldArea}>
                             <TextField
-                                /*className={classes.addAuthorField}*/
                                 type="text"
                                 label="Name"
                                 margin="dense"
@@ -86,7 +85,6 @@ const AddAuthorForm: React.FC<AddAuthorFormPropsType> = (props) => {
                             <div style={{color: 'red'}}>{formik.errors.name}</div>
                             }
                             <TextField
-                                /*className={classes.addAuthorField}*/
                                 type="text"
                                 label="Label"
                                 margin="dense"

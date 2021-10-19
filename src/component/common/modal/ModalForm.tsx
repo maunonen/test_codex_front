@@ -25,7 +25,18 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1,
             width: "400px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: "25px",
+            marginTop: "20px",
         },
+        childrenBlock: {
+            width: "85%",
+        },
+        actionBlock: {
+            marginTop: "15px",
+        }
     }),
 );
 
@@ -55,22 +66,31 @@ const ModalForm: React.FC<ModalPropsType> = (props) => {
                 aria-describedby="alert-dialog-description"
             >
                 <div className={classes.root}>
-                    {modalTitle && <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>}
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            {modalText && <Typography variant={"body1"}>{modalText}</Typography>}
-                            {children}
-                        </DialogContentText>
-                    </DialogContent>
                     {
-                        !removeActionBlock && (<DialogActions>
+                        modalTitle && <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
+                    }
+                    {
+                        modalText &&
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                <Typography variant={"body1"}>{modalText}</Typography>
+                            </DialogContentText>
+                        </DialogContent>
+                    }
+                    {
+                        children && <div className={classes.childrenBlock}>
+                            {children}
+                        </div>
+                    }
+                    {
+                        !removeActionBlock && (<div className={classes.actionBlock}><DialogActions>
                             <Button onClick={handleClose} color="primary">
                                 Cancel
                             </Button>
                             <Button onClick={handleAction} color="primary" autoFocus>
                                 {actionButtonTitle}
                             </Button>
-                        </DialogActions>)
+                        </DialogActions></div>)
                     }
                 </div>
             </Dialog>

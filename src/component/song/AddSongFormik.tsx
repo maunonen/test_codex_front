@@ -5,7 +5,7 @@ import {
     Button, createStyles, FormControl, FormGroup, FormHelperText,
     Grid, Input, makeStyles, NativeSelect, TextField, Theme,
 } from "@material-ui/core";
-import {AddSongObjectType, NewAuthorObjectType} from "../../api/api";
+import {AddSongObjectType} from "../../api/api";
 import {AuthorType} from "./AddSongForm";
 
 
@@ -114,7 +114,7 @@ const AddAuthorForm: React.FC<AddSongFormikPropsType> = (props) => {
                                 <option value={""}>{"--Choose Author"}</option>
                                 {
                                     authorArray && authorArray.map(author => {
-                                        return <option value={author.uuid}>{author.name}</option>
+                                        return <option key={author.uuid} value={author.uuid}>{author.name}</option>
                                     })
                                 }
                             </NativeSelect>
